@@ -16,3 +16,7 @@ management:
 
 openai:
   key: ${OPENAI_KEY}
+
+springdoc:
+  swagger-ui:
+    path: /docs

@@ -1,0 +1,24 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+    import:
+      - optional:file:env/local.env[.properties]
+  datasource:
+    url: jdbc:postgresql://localhost:5432/chatbot
+    username: season
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-init-sql: "SET NAMES 'UTF8'"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    org:
+      springframework: DEBUG

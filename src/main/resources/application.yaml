@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    group:
+      "local": "local"
+      "dev": "dev"
+      "prod": "prod"
+
+management:
+  endpoint:
+    health:
+      show-components: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+openai:
+  key: ${OPENAI_KEY}

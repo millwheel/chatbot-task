@@ -38,7 +38,7 @@ class ChatThreadController (
     @DeleteMapping("/{threadId}")
     fun deleteThread(
         @RequestAttribute userId: String,
-        @PathVariable threadId: Long
+        @PathVariable threadId: String
     ) {
         chatThreadService.deleteThread(userId, threadId)
     }

@@ -48,7 +48,7 @@ class ChatThreadService (
     }
 
     @Transactional
-    fun deleteThread(userId: String, threadId: Long) {
+    fun deleteThread(userId: String, threadId: String) {
         val thread = chatThreadRepository.findByIdOrThrow(threadId)
 
         if (thread.userId != userId) {

@@ -4,8 +4,8 @@ import com.example.chatbot.entity.chat.Chat
 import java.time.OffsetDateTime
 
 data class ChatResponse (
-    val chatId: Long,
-    val threadId: Long,
+    val chatId: String,
+    val threadId: String,
     val question: String,
     val answer: String,
     val createdAt: OffsetDateTime
@@ -13,8 +13,8 @@ data class ChatResponse (
     companion object {
         fun of (chat: Chat): ChatResponse {
             return ChatResponse(
-                chatId = chat.id!!,
-                threadId = chat.chatThread.id!!,
+                chatId = chat.id,
+                threadId = chat.chatThread.id,
                 question = chat.question,
                 answer = chat.answer,
                 createdAt = chat.createdAt

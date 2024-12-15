@@ -2,13 +2,14 @@ package com.example.chatbot.entity.chat
 
 import com.example.chatbot.entity.BaseTime
 import jakarta.persistence.*
+import java.util.*
 
 @Entity
 class Chat constructor (
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     val question: String,
 
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     val answer: String,
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -16,8 +17,7 @@ class Chat constructor (
     val chatThread: ChatThread,
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null
+    val id: String = UUID.randomUUID().toString(),
 ) : BaseTime() {
 
 

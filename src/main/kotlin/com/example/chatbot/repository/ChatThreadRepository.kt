@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface ChatThreadRepository : JpaRepository<ChatThread, Long> {
+interface ChatThreadRepository : JpaRepository<ChatThread, String> {
     fun findByUserIdOrderByUpdatedAtDesc(userId: String): List<ChatThread>
     override fun findAll(pageable: Pageable): Page<ChatThread>
     fun findByUserId(userId: String, pageable: Pageable): Page<ChatThread>

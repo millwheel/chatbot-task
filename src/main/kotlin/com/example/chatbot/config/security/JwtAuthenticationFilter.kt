@@ -1,4 +1,4 @@
-package com.example.chatbot.config
+package com.example.chatbot.config.security
 
 import com.example.chatbot.util.validateToken
 import jakarta.servlet.FilterChain

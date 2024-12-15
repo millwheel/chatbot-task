@@ -14,9 +14,10 @@ class ChatService (
 ){
 
     @Transactional
-    fun createChat(userId: String, question: String, answer: String): Chat {
+    fun createChat(userId: String, question: String): Chat {
         val chatThread = chatThreadService.getOrCreateThread(userId)
 
+        // TODO API Sender 구현
         val chat = Chat(
             question = question,
             answer = answer,

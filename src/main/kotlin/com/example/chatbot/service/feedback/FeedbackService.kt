@@ -33,7 +33,7 @@ class FeedbackService(
     fun getUserFeedbacks(userId: String, isPositive: Boolean?, pageIndex: Int, pageSize: Int, orderDirection: String): Page<FeedbackResponse> {
         val pageable = createPageable(pageIndex, pageSize, orderDirection)
         val feedbacks = isPositive?.let {
-            feedbackRepository.findByPositiveAndUserId(it, userId, pageable)
+            feedbackRepository.findByIsPositiveAndUserId(it, userId, pageable)
         } ?: feedbackRepository.findByUserId(userId, pageable)
         return feedbacks.map { FeedbackResponse.of(it) }
     }
@@ -41,7 +41,7 @@ class FeedbackService(
     fun getAllFeedbacks(isPositive: Boolean?, pageIndex: Int, pageSize: Int, orderDirection: String): Page<FeedbackResponse> {
         val pageable = createPageable(pageIndex, pageSize, orderDirection)
         val feedbacks = isPositive?.let {
-            feedbackRepository.findByPositive(it, pageable)
+            feedbackRepository.findByIsPositive(it, pageable)
         } ?: feedbackRepository.findAll(pageable)
         return feedbacks.map { FeedbackResponse.of(it) }
     }

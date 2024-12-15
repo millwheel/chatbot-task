@@ -1,6 +1,8 @@
 package com.example.chatbot.controller
 
-import com.example.chatbot.entity.User
+import com.example.chatbot.dto.ResponseResult
+import com.example.chatbot.dto.user.UserResponse
+import com.example.chatbot.entity.user.User
 import com.example.chatbot.service.UserService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,8 +15,8 @@ class UserController (
 ) {
 
     @GetMapping
-    fun getUsers() : List<User> {
-        return userService.getAllUsers()
+    fun getUsers() : ResponseResult<List<UserResponse>> {
+        return ResponseResult(userService.getAllUsers())
     }
 
 }

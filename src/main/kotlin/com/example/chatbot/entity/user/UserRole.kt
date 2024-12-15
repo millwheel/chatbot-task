@@ -1,4 +1,4 @@
-package com.example.chatbot.entity
+package com.example.chatbot.entity.user
 
 enum class UserRole {
 

@@ -1,6 +1,6 @@
 package com.example.chatbot.repository
 
-import com.example.chatbot.entity.User
+import com.example.chatbot.entity.user.User
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserRepository : JpaRepository<User, String> {

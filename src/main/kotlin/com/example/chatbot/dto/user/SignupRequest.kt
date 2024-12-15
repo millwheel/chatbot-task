@@ -1,6 +1,6 @@
 package com.example.chatbot.dto.user
 
-import com.example.chatbot.entity.UserRole
+import com.example.chatbot.entity.user.UserRole
 
 data class SignupRequest (
     val email: String,

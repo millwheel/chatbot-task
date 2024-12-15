@@ -2,8 +2,9 @@ package com.example.chatbot.service
 
 import com.example.chatbot.dto.user.LoginRequest
 import com.example.chatbot.dto.user.SignupRequest
-import com.example.chatbot.entity.User
-import com.example.chatbot.entity.UserRole
+import com.example.chatbot.dto.user.UserResponse
+import com.example.chatbot.entity.user.User
+import com.example.chatbot.entity.user.UserRole
 import com.example.chatbot.repository.UserRepository
 import com.example.chatbot.util.*
 import org.springframework.stereotype.Service
@@ -35,8 +36,9 @@ class UserService (
         return generateToken
     }
 
-    fun getAllUsers(): List<User> {
-        return userRepository.findAll()
+    fun getAllUsers(): List<UserResponse> {
+        val users = userRepository.findAll()
+        return users.map { UserResponse.of(it) }
     }
 
     fun deleteUser(id: String) {

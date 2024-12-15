@@ -1,10 +1,11 @@
 package com.example.chatbot.service
 
+import com.example.chatbot.dto.user.LoginRequest
+import com.example.chatbot.dto.user.SignupRequest
 import com.example.chatbot.entity.User
 import com.example.chatbot.entity.UserRole
 import com.example.chatbot.repository.UserRepository
-import com.example.chatbot.util.encodePassword
-import com.example.chatbot.util.findByIdOrThrow
+import com.example.chatbot.util.*
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,40 +13,34 @@ class UserService (
     private val userRepository: UserRepository
 ){
 
-    fun createUser(email: String, password: String, name: String, role: UserRole = UserRole.MEMBER): User {
-        if (userRepository.existsByEmail(email)) {
+    fun createUser(signupRequest: SignupRequest): User {
+        if (userRepository.existsByEmail(signupRequest.email)) {
             throw RuntimeException("Email already exists")
         }
         val user = User(
-            email = email,
-            password = encodePassword(password),
-            name = name,
-            userRole = role
+            email = signupRequest.email,
+            password = encodePassword(signupRequest.password),
+            name = signupRequest.name,
+            userRole = signupRequest.role ?: UserRole.MEMBER
         )
         return userRepository.save(user)
     }
 
-    fun getUserById(id: String): User {
-        return userRepository.findByIdOrThrow(id)
+    fun login(loginRequest: LoginRequest) : String{
+        val user = userRepository.findByEmail(loginRequest.email) ?: fail(loginRequest.email)
+        if (!matchesPassword(loginRequest.password, user.password)) {
+            throw RuntimeException("Invalid email or password")
+        }
+        val generateToken = generateToken(user.email, user.userRole.name)
+        return generateToken
     }
 
     fun getAllUsers(): List<User> {
         return userRepository.findAll()
     }
 
-    fun updateUser(id: String, name: String?, password: String?): User {
-        val user = getUserById(id)
-        if (!name.isNullOrBlank()) {
-            user.name = name
-        }
-        if (!password.isNullOrBlank()) {
-            user.password = encodePassword(password)
-        }
-        return userRepository.save(user)
-    }
-
     fun deleteUser(id: String) {
-        val user = getUserById(id)
+        val user = userRepository.findByIdOrThrow(id)
         userRepository.delete(user)
     }
 

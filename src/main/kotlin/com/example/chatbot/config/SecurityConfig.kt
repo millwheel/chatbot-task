@@ -15,7 +15,7 @@ class SecurityConfig (
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests { authorization -> authorization
-                .requestMatchers( "/actuator/**", "/error/**", "/user/**").permitAll() // TODO user api 접근 권한 수정
+                .requestMatchers( "/actuator/**", "/error/**", "/auth/**").permitAll()
                 .anyRequest().authenticated()
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)

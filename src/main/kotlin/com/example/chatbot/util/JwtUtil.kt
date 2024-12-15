@@ -6,7 +6,7 @@ import java.util.*
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 
-private const val SECRET_KEY = "secret-key"
+private const val SECRET_KEY = "this-is-a-very-secure-and-long-secret-key-256-bits"
 
 private val secretKey: SecretKey = SecretKeySpec(Base64.getEncoder().encode(SECRET_KEY.toByteArray()), SignatureAlgorithm.HS256.jcaName)
 

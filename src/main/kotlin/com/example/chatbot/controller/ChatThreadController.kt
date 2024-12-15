@@ -11,6 +11,7 @@ class ChatThreadController (
     private val chatThreadService: ChatThreadService
 ) {
 
+    // TODO 관리자 권한 추가
     @GetMapping("/all")
     fun getAllThreads(
         @RequestParam(defaultValue = "0") pageIndex: Int,
@@ -21,7 +22,8 @@ class ChatThreadController (
         return threads.map { ChatThreadResponse.of(it) }
     }
 
-    @GetMapping
+    // TODO 멤버 권한 추가
+    @GetMapping("/me")
     fun getThreadsByUser(
         @RequestAttribute userId: String,
         @RequestParam(defaultValue = "0") pageIndex: Int,
@@ -32,6 +34,7 @@ class ChatThreadController (
         return threads.map { ChatThreadResponse.of(it) }
     }
 
+    // TODO 멤버 권한 추가
     @DeleteMapping("/{threadId}")
     fun deleteThread(
         @RequestAttribute userId: String,

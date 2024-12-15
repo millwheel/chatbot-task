@@ -16,9 +16,9 @@ class ChatController (
     @ResponseStatus(HttpStatus.CREATED)
     fun createChat(
         @RequestAttribute userId: String,
-        @RequestBody request: ChatRequest
+        @RequestBody chatRequest: ChatRequest
     ): ChatResponse {
-        val chat = chatService.createChat(userId, request.question)
+        val chat = chatService.createChat(userId, chatRequest)
         return ChatResponse.of(chat)
     }
 

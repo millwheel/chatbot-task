@@ -1,5 +1,6 @@
 package com.example.chatbot.dto.chat
 
 data class ChatRequest (
-    val question: String
+    val question: String,
+    val model: String?
 )

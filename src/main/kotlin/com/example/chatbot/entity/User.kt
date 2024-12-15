@@ -11,11 +11,11 @@ class User(
     @Column(nullable = false, unique = true)
     val email: String,
     @Column(nullable = false)
-    val password: String,
+    var password: String,
     @Column(nullable = false)
-    val name: String,
+    var name: String,
     @Column(nullable = false)
-    val userRole: UserRole = UserRole.MEMBER
+    var userRole: UserRole
 ){
 
     init {

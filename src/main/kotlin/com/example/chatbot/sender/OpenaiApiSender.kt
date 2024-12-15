@@ -1,6 +1,6 @@
 package com.example.chatbot.sender
 
-import com.example.chatbot.sender.dto.ChatCompletionRequest
+import com.example.chatbot.sender.dto.OpenaiRequest
 import com.example.chatbot.sender.dto.ChatMessage
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
@@ -28,8 +28,8 @@ class OpenaiApiSender(
         return result!!
     }
 
-    private fun buildRequestBody(text: String, model: String): ChatCompletionRequest {
-        return ChatCompletionRequest(
+    private fun buildRequestBody(text: String, model: String): OpenaiRequest {
+        return OpenaiRequest(
             model = model,
             messages = listOf(
                 ChatMessage(role = "system", content = "You are assistant."),

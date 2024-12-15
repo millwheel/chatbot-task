@@ -4,6 +4,7 @@ import com.example.chatbot.dto.chat.ChatRequest
 import com.example.chatbot.entity.chat.Chat
 import com.example.chatbot.repository.ChatRepository
 import com.example.chatbot.sender.OpenaiApiSender
+import com.example.chatbot.sender.parseAnswerFromResponse
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -24,12 +25,11 @@ class ChatService (
         val model = chatRequest.model ?: "gpt-4o-mini"
 
         val response = openaiApiSender.sendRequestAndGetResponse(question, model)
-
-        println(response)
+        val answer = parseAnswerFromResponse(response)
 
         val chat = Chat(
             question = question,
-            answer = response,
+            answer = answer,
             chatThread = chatThread
         )
 

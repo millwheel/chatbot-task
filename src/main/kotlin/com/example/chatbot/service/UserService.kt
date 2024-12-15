@@ -3,6 +3,7 @@ package com.example.chatbot.service
 import com.example.chatbot.entity.User
 import com.example.chatbot.entity.UserRole
 import com.example.chatbot.repository.UserRepository
+import com.example.chatbot.util.encodePassword
 import com.example.chatbot.util.findByIdOrThrow
 import org.springframework.stereotype.Service
 
@@ -17,7 +18,7 @@ class UserService (
         }
         val user = User(
             email = email,
-            password = password,
+            password = encodePassword(password),
             name = name,
             userRole = role
         )
@@ -38,7 +39,7 @@ class UserService (
             user.name = name
         }
         if (!password.isNullOrBlank()) {
-            user.password = password // 비밀번호는 암호화된 값을 저장해야 함
+            user.password = encodePassword(password)
         }
         return userRepository.save(user)
     }

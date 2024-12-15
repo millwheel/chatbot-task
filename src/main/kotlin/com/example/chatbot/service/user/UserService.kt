@@ -1,4 +1,4 @@
-package com.example.chatbot.service
+package com.example.chatbot.service.user
 
 import com.example.chatbot.dto.user.LoginRequest
 import com.example.chatbot.dto.user.SignupRequest

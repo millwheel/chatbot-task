@@ -2,9 +2,7 @@ package com.example.chatbot.controller
 
 import com.example.chatbot.dto.user.LoginRequest
 import com.example.chatbot.dto.user.SignupRequest
-import com.example.chatbot.service.UserService
-import com.example.chatbot.util.generateToken
-import com.example.chatbot.util.matchesPassword
+import com.example.chatbot.service.user.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 

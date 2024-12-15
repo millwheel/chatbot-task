@@ -4,7 +4,7 @@ import com.example.chatbot.dto.chat.ChatRequest
 import com.example.chatbot.entity.chat.Chat
 import com.example.chatbot.repository.ChatRepository
 import com.example.chatbot.sender.OpenaiApiSender
-import com.example.chatbot.sender.parseAnswerFromResponse
+import com.example.chatbot.util.parseAnswerFromResponse
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

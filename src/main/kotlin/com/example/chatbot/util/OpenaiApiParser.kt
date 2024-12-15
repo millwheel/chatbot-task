@@ -1,4 +1,4 @@
-package com.example.chatbot.sender
+package com.example.chatbot.util
 
 import com.example.chatbot.sender.dto.OpenaiResponse
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper

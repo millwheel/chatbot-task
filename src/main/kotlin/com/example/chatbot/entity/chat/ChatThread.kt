@@ -5,7 +5,7 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "thread")
-class ChatThread (
+class ChatThread constructor (
     val userId: String,
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

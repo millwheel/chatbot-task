@@ -10,11 +10,12 @@ private const val SECRET_KEY = "this-is-a-very-secure-and-long-secret-key-256-bi
 
 private val secretKey: SecretKey = SecretKeySpec(Base64.getEncoder().encode(SECRET_KEY.toByteArray()), SignatureAlgorithm.HS256.jcaName)
 
-fun generateToken(email: String, role: String): String {
+fun generateToken(userId: String, email: String, role: String): String {
     val now = Date()
     val expiryDate = Date(now.time + 1000 * 60 * 60 * 24)
     return Jwts.builder()
-        .setSubject(email)
+        .setSubject(userId)
+        .claim("email", email)
         .claim("role", role)
         .setIssuedAt(now)
         .setExpiration(expiryDate)

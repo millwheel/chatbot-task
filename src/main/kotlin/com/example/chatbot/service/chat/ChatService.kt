@@ -20,7 +20,7 @@ class ChatService (
         // TODO API Sender 구현
         val chat = Chat(
             question = question,
-            answer = answer,
+            answer = "yes",
             chatThread = chatThread
         )
 

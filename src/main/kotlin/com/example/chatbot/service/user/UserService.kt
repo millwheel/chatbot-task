@@ -32,7 +32,7 @@ class UserService (
         if (!matchesPassword(loginRequest.password, user.password)) {
             throw RuntimeException("Invalid email or password")
         }
-        val generateToken = generateToken(user.email, user.userRole.name)
+        val generateToken = generateToken(user.id, user.email, user.userRole.name)
         return generateToken
     }
 

@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/chats")
 class ChatController (
     private val chatService: ChatService
 ) {

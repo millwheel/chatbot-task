@@ -5,6 +5,7 @@ import com.example.chatbot.dto.feedback.FeedbackResponse
 import com.example.chatbot.entity.feedback.Feedback
 import com.example.chatbot.repository.ChatRepository
 import com.example.chatbot.repository.FeedbackRepository
+import com.example.chatbot.util.createPageable
 import com.example.chatbot.util.findByIdOrThrow
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -44,12 +45,6 @@ class FeedbackService(
             feedbackRepository.findByIsPositive(it, pageable)
         } ?: feedbackRepository.findAll(pageable)
         return feedbacks.map { FeedbackResponse.of(it) }
-    }
-
-    private fun createPageable(pageIndex: Int, pageSize: Int, orderDirection: String): Pageable {
-        val sort = if (orderDirection.lowercase() == "asc") Sort.by("createdAt").ascending()
-        else Sort.by("createdAt").descending()
-        return PageRequest.of(pageIndex, pageSize, sort)
     }
 
 }

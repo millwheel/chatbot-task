@@ -2,6 +2,7 @@ package com.example.chatbot.service.chat
 
 import com.example.chatbot.entity.chat.ChatThread
 import com.example.chatbot.repository.ChatThreadRepository
+import com.example.chatbot.util.createPageable
 import com.example.chatbot.util.findByIdOrThrow
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -36,14 +37,12 @@ class ChatThreadService (
     }
 
     fun getAllTread(pageIndex: Int, pageSize: Int, orderDirection: String): Page<ChatThread> {
-        val sortDirection = Sort.Direction.fromString(orderDirection)
-        val pageable: Pageable = PageRequest.of(pageIndex, pageSize, Sort.by(sortDirection, "createdAt"))
+        val pageable = createPageable(pageIndex, pageSize, orderDirection)
         return chatThreadRepository.findAll(pageable)
     }
 
     fun getThreadsByUser(userId: String, pageIndex: Int, pageSize: Int, orderDirection: String): Page<ChatThread> {
-        val sortDirection = Sort.Direction.fromString(orderDirection)
-        val pageable: Pageable = PageRequest.of(pageIndex, pageSize, Sort.by(sortDirection, "createdAt"))
+        val pageable = createPageable(pageIndex, pageSize, orderDirection)
         return chatThreadRepository.findByUserId(userId, pageable)
     }
 

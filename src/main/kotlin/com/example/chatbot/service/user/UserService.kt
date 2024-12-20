@@ -7,6 +7,7 @@ import com.example.chatbot.dto.user.SignupRequest
 import com.example.chatbot.dto.user.UserResponse
 import com.example.chatbot.entity.user.User
 import com.example.chatbot.entity.user.UserRole
+import com.example.chatbot.exception.custom.InvalidEmailOrPasswordException
 import com.example.chatbot.repository.UserRepository
 import com.example.chatbot.util.*
 import org.springframework.stereotype.Service
@@ -31,9 +32,9 @@ class UserService (
     }
 
     fun login(loginRequest: LoginRequest) : String{
-        val user = userRepository.findByEmail(loginRequest.email) ?: fail(loginRequest.email)
+        val user = userRepository.findByEmail(loginRequest.email) ?: throw InvalidEmailOrPasswordException()
         if (!matchesPassword(loginRequest.password, user.password)) {
-            throw RuntimeException("Invalid email or password")
+            throw InvalidEmailOrPasswordException()
         }
         val generateToken = jwtManager.generateToken(user.id, user.email, user.userRole.name)
         return generateToken

@@ -4,6 +4,7 @@ import com.example.chatbot.dto.chat.ChatRequest
 import com.example.chatbot.dto.chat.ChatResponse
 import com.example.chatbot.service.chat.ChatService
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -12,6 +13,7 @@ class ChatController (
     private val chatService: ChatService
 ) {
 
+    @PreAuthorize("hasRole('ADMIN, MEMBER')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createChat(

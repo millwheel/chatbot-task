@@ -5,6 +5,7 @@ import com.example.chatbot.dto.feedback.FeedbackResponse
 import com.example.chatbot.dto.feedback.FeedbackUpdateRequest
 import com.example.chatbot.service.feedback.FeedbackService
 import org.springframework.data.domain.Page
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -13,7 +14,7 @@ class FeedbackController(
     private val feedbackService: FeedbackService
 ) {
 
-    // TODO 관리자 권한 추가
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     fun getAllFeedbacks(
         @RequestParam isPositive: Boolean?,
@@ -24,7 +25,7 @@ class FeedbackController(
         return feedbackService.getAllFeedbacks(isPositive, pageIndex, pageSize, orderDirection)
     }
 
-    // TODO 멤버 권한 추가
+    @PreAuthorize("hasRole('ADMIN, MEMBER')")
     @GetMapping("/me")
     fun getUserFeedbacks(
         @RequestAttribute userId: String,
@@ -36,6 +37,7 @@ class FeedbackController(
         return feedbackService.getUserFeedbacks(userId, isPositive, pageIndex, pageSize, orderDirection)
     }
 
+    @PreAuthorize("hasRole('ADMIN, MEMBER')")
     @PostMapping
     fun createFeedback(
         @RequestAttribute userId: String,
@@ -44,7 +46,7 @@ class FeedbackController(
         feedbackService.createFeedback(userId, feedbackCreateRequest)
     }
 
-    // TODO 관리자 권한 추가
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{feedbackId}")
     fun updateFeedbackStatus(
         @PathVariable feedbackId: String,

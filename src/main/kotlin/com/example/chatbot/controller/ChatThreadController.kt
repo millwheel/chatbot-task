@@ -3,6 +3,7 @@ package com.example.chatbot.controller
 import com.example.chatbot.dto.chat.ChatThreadResponse
 import com.example.chatbot.service.chat.ChatThreadService
 import org.springframework.data.domain.Page
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -11,7 +12,7 @@ class ChatThreadController (
     private val chatThreadService: ChatThreadService
 ) {
 
-    // TODO 관리자 권한 추가
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     fun getAllThreads(
         @RequestParam(defaultValue = "0") pageIndex: Int,
@@ -22,7 +23,7 @@ class ChatThreadController (
         return threads.map { ChatThreadResponse.of(it) }
     }
 
-    // TODO 멤버 권한 추가
+    @PreAuthorize("hasRole('ADMIN, MEMBER')")
     @GetMapping("/me")
     fun getThreadsByUser(
         @RequestAttribute userId: String,
@@ -34,7 +35,7 @@ class ChatThreadController (
         return threads.map { ChatThreadResponse.of(it) }
     }
 
-    // TODO 멤버 권한 추가
+    @PreAuthorize("hasRole('ADMIN, MEMBER')")
     @DeleteMapping("/{threadId}")
     fun deleteThread(
         @RequestAttribute userId: String,

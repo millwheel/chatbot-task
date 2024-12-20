@@ -14,7 +14,7 @@ class FeedbackController(
     private val feedbackService: FeedbackService
 ) {
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/all")
     fun getAllFeedbacks(
         @RequestParam isPositive: Boolean?,
@@ -25,7 +25,7 @@ class FeedbackController(
         return feedbackService.getAllFeedbacks(isPositive, pageIndex, pageSize, orderDirection)
     }
 
-    @PreAuthorize("hasRole('ADMIN, MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN, MEMBER')")
     @GetMapping("/me")
     fun getUserFeedbacks(
         @RequestAttribute userId: String,
@@ -37,7 +37,7 @@ class FeedbackController(
         return feedbackService.getUserFeedbacks(userId, isPositive, pageIndex, pageSize, orderDirection)
     }
 
-    @PreAuthorize("hasRole('ADMIN, MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN, MEMBER')")
     @PostMapping
     fun createFeedback(
         @RequestAttribute userId: String,
@@ -46,7 +46,7 @@ class FeedbackController(
         feedbackService.createFeedback(userId, feedbackCreateRequest)
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/{feedbackId}")
     fun updateFeedbackStatus(
         @PathVariable feedbackId: String,

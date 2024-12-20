@@ -12,7 +12,7 @@ class ChatThreadController (
     private val chatThreadService: ChatThreadService
 ) {
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/all")
     fun getAllThreads(
         @RequestParam(defaultValue = "0") pageIndex: Int,
@@ -23,7 +23,7 @@ class ChatThreadController (
         return threads.map { ChatThreadResponse.of(it) }
     }
 
-    @PreAuthorize("hasRole('ADMIN, MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN, MEMBER')")
     @GetMapping("/me")
     fun getThreadsByUser(
         @RequestAttribute userId: String,
@@ -35,7 +35,7 @@ class ChatThreadController (
         return threads.map { ChatThreadResponse.of(it) }
     }
 
-    @PreAuthorize("hasRole('ADMIN, MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN, MEMBER')")
     @DeleteMapping("/{threadId}")
     fun deleteThread(
         @RequestAttribute userId: String,

@@ -23,6 +23,7 @@ class ChatService (
 
         val question = chatRequest.question
         val model = chatRequest.model ?: "gpt-4o-mini"
+        val isStreaming = chatRequest.isStreaming ?: false
 
         val response = openaiApiSender.sendRequestAndGetResponse(question, model)
         val answer = parseAnswerFromResponse(response)

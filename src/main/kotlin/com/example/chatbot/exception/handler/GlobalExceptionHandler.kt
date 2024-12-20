@@ -2,6 +2,7 @@ package com.example.chatbot.exception.handler
 
 import com.example.chatbot.exception.custom.DataNotFoundException
 import com.example.chatbot.exception.custom.InvalidEmailOrPasswordException
+import com.example.chatbot.exception.custom.NotThreadOwnerException
 import com.example.chatbot.exception.dto.ErrorResult
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.HttpStatus
@@ -26,6 +27,13 @@ class GlobalExceptionHandler {
     fun handleDataNotFoundException(ex:DataNotFoundException): ErrorResult {
         logger.error{ ex.message }
         return ErrorResult.of(HttpStatus.NOT_FOUND, ex.message!!)
+    }
+
+    @ExceptionHandler(NotThreadOwnerException::class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    fun handleNotThreadOwnerException(ex: NotThreadOwnerException): ErrorResult {
+        logger.error{ ex.message }
+        return ErrorResult.of(HttpStatus.FORBIDDEN, ex.message!!)
     }
 
 }

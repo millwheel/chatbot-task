@@ -1,6 +1,7 @@
 package com.example.chatbot.service.chat
 
 import com.example.chatbot.entity.chat.ChatThread
+import com.example.chatbot.exception.custom.NotThreadOwnerException
 import com.example.chatbot.repository.ChatThreadRepository
 import com.example.chatbot.util.createPageable
 import com.example.chatbot.util.findByIdOrThrow
@@ -50,7 +51,7 @@ class ChatThreadService (
         val thread = chatThreadRepository.findByIdOrThrow(threadId)
 
         if (thread.userId != userId) {
-            throw RuntimeException("You are not thread owner")
+            throw NotThreadOwnerException()
         }
 
         chatThreadRepository.delete(thread)

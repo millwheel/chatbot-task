@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional(readOnly = true)
 class FeedbackService(
     private val feedbackRepository: FeedbackRepository,
     private val chatRepository: ChatRepository
 ) {
 
+    @Transactional
     fun createFeedback(userId: String, feedbackCreateRequest: FeedbackCreateRequest) {
         val chat = chatRepository.findByIdOrThrow(feedbackCreateRequest.chatId)
         if (feedbackRepository.existsByUserId(userId)) {
@@ -47,6 +49,7 @@ class FeedbackService(
         return feedbacks.map { FeedbackResponse.of(it) }
     }
 
+    @Transactional
     fun updateFeedbackStatus(feedbackId: String, feedbackStatus: FeedbackStatus){
         val feedback = feedbackRepository.findByIdOrThrow(feedbackId)
         feedback.updateStatus(feedbackStatus)

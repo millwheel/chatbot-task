@@ -23,7 +23,7 @@ class ChatThreadController (
         return threads.map { ChatThreadResponse.of(it) }
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN, MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER')")
     @GetMapping("/me")
     fun getThreadsByUser(
         @RequestAttribute userId: String,
@@ -35,7 +35,7 @@ class ChatThreadController (
         return threads.map { ChatThreadResponse.of(it) }
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN, MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER')")
     @DeleteMapping("/{threadId}")
     fun deleteThread(
         @RequestAttribute userId: String,

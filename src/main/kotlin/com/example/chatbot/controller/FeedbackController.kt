@@ -25,7 +25,7 @@ class FeedbackController(
         return feedbackService.getAllFeedbacks(isPositive, pageIndex, pageSize, orderDirection)
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN, MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER')")
     @GetMapping("/me")
     fun getUserFeedbacks(
         @RequestAttribute userId: String,
@@ -37,7 +37,7 @@ class FeedbackController(
         return feedbackService.getUserFeedbacks(userId, isPositive, pageIndex, pageSize, orderDirection)
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN, MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER')")
     @PostMapping
     fun createFeedback(
         @RequestAttribute userId: String,

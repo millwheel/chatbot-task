@@ -13,7 +13,7 @@ class ChatController (
     private val chatService: ChatService
 ) {
 
-    @PreAuthorize("hasAnyRole('ADMIN, MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createChat(

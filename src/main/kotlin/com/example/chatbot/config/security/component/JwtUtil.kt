@@ -1,4 +1,4 @@
-package com.example.chatbot.util
+package com.example.chatbot.config.security.component
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -12,13 +12,12 @@ private val secretKey: SecretKey = SecretKeySpec(Base64.getEncoder().encode(SECR
 
 fun generateToken(userId: String, email: String, role: String): String {
     val now = Date()
-    val expiryDate = Date(now.time + 1000 * 60 * 60 * 24)
     return Jwts.builder()
         .setSubject(userId)
         .claim("email", email)
         .claim("role", role)
         .setIssuedAt(now)
-        .setExpiration(expiryDate)
+        .setExpiration(Date(now.time + 1000 * 60 * 60 * 24))
         .signWith(
             secretKey, SignatureAlgorithm.HS256
         )

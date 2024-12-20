@@ -2,17 +2,19 @@ package com.example.chatbot.sender
 
 import com.example.chatbot.sender.dto.OpenaiRequest
 import com.example.chatbot.sender.dto.ChatMessage
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 
 @Component
 class OpenaiApiSender(
-    private val openaiProperties: OpenaiProperties
+    @Value("\${openai.key}")
+    private val openaiKey: String
 ) {
 
     private var restClient = RestClient.builder()
         .baseUrl("https://api.openai.com/v1/chat/completions")
-        .defaultHeader("Authorization", "Bearer ${openaiProperties.key}")
+        .defaultHeader("Authorization", "Bearer $openaiKey")
         .defaultHeader("Content-Type", "application/json")
         .build()
 

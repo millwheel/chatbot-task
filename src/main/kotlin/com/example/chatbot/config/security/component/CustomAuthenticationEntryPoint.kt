@@ -1,4 +1,4 @@
-package com.example.chatbot.config.security
+package com.example.chatbot.config.security.component
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

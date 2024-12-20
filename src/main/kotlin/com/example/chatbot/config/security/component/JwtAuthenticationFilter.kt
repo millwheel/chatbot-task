@@ -1,6 +1,5 @@
-package com.example.chatbot.config.security
+package com.example.chatbot.config.security.component
 
-import com.example.chatbot.util.validateToken
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

@@ -33,9 +33,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
-    // Lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    // Logging
+    implementation 'io.github.oshai:kotlin-logging-jvm:5.1.4'
     // Postgres
     runtimeOnly 'org.postgresql:postgresql'
     // Jwt

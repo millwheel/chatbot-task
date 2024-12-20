@@ -11,8 +11,10 @@ import javax.crypto.spec.SecretKeySpec
 
 @Component
 class JwtManager (
-    @Value("\${app.secret}")
-    private val secretKeyString: String
+    @Value("\${jwt.secret:this-is-a-very-secure-and-long-secret-key-256-bits}")
+    private val secretKeyString: String,
+    @Value("\${jwt.expiration-ms:86400000}")
+    private val expirationMs: Long
 ) {
 
     private val secretKey: SecretKey = SecretKeySpec(
@@ -26,7 +28,7 @@ class JwtManager (
             .claim("email", email)
             .claim("role", role)
             .setIssuedAt(now)
-            .setExpiration(Date(now.time + 1000 * 60 * 60 * 24))
+            .setExpiration(Date(now.time + expirationMs))
             .signWith(
                 secretKey, SignatureAlgorithm.HS256
             )

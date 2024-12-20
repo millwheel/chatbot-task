@@ -3,6 +3,7 @@ package com.example.chatbot.controller
 import com.example.chatbot.dto.feedback.FeedbackCreateRequest
 import com.example.chatbot.dto.feedback.FeedbackResponse
 import com.example.chatbot.dto.feedback.FeedbackUpdateRequest
+import com.example.chatbot.entity.feedback.FeedbackStatus
 import com.example.chatbot.service.feedback.FeedbackService
 import org.springframework.data.domain.Page
 import org.springframework.security.access.prepost.PreAuthorize
@@ -47,12 +48,19 @@ class FeedbackController(
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @PutMapping("/{feedbackId}")
-    fun updateFeedbackStatus(
-        @PathVariable feedbackId: String,
-        @RequestBody feedbackUpdateRequest: FeedbackUpdateRequest
+    @PutMapping("/{feedbackId}/status/pending")
+    fun updateFeedbackStatusAsPending(
+        @PathVariable feedbackId: String
     ) {
-        feedbackService.updateFeedbackStatus(feedbackId, feedbackUpdateRequest.status)
+        feedbackService.updateFeedbackStatus(feedbackId, FeedbackStatus.PENDING)
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PutMapping("/{feedbackId}/status/resolved")
+    fun updateFeedbackStatusAsResolved(
+        @PathVariable feedbackId: String
+    ) {
+        feedbackService.updateFeedbackStatus(feedbackId, FeedbackStatus.RESOLVED)
     }
 
 }

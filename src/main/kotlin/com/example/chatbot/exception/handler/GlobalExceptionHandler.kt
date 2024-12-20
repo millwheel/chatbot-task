@@ -5,13 +5,11 @@ import com.example.chatbot.exception.custom.InvalidEmailOrPasswordException
 import com.example.chatbot.exception.dto.ErrorResult
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestControllerAdvice
 
-
-
-@ControllerAdvice
+@RestControllerAdvice
 class GlobalExceptionHandler {
 
     private val logger = KotlinLogging.logger {}

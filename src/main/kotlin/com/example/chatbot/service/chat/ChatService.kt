@@ -23,6 +23,7 @@ class ChatService (
 
         val question = chatRequest.question
         val model = chatRequest.model ?: "gpt-4o-mini"
+        // TODO open ai 응답 stream 형태로 처리 기능 추가
         val isStreaming = chatRequest.isStreaming ?: false
 
         val response = openaiApiSender.sendRequestAndGetResponse(question, model)

@@ -1,6 +1,6 @@
 package com.example.chatbot.dto.feedback
 
-data class FeedbackRequest(
+data class FeedbackCreateRequest(
     val chatId: String,
     val isPositive: Boolean
 )

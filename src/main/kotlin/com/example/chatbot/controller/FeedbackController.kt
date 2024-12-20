@@ -1,7 +1,8 @@
 package com.example.chatbot.controller
 
-import com.example.chatbot.dto.feedback.FeedbackRequest
+import com.example.chatbot.dto.feedback.FeedbackCreateRequest
 import com.example.chatbot.dto.feedback.FeedbackResponse
+import com.example.chatbot.dto.feedback.FeedbackUpdateRequest
 import com.example.chatbot.service.feedback.FeedbackService
 import org.springframework.data.domain.Page
 import org.springframework.web.bind.annotation.*
@@ -38,9 +39,18 @@ class FeedbackController(
     @PostMapping
     fun createFeedback(
         @RequestAttribute userId: String,
-        @RequestBody feedbackRequest: FeedbackRequest
+        @RequestBody feedbackCreateRequest: FeedbackCreateRequest
     ) {
-        feedbackService.createFeedback(userId, feedbackRequest)
+        feedbackService.createFeedback(userId, feedbackCreateRequest)
+    }
+
+    // TODO 관리자 권한 추가
+    @PutMapping("/{feedbackId}")
+    fun updateFeedbackStatus(
+        @PathVariable feedbackId: String,
+        @RequestBody feedbackUpdateRequest: FeedbackUpdateRequest
+    ) {
+        feedbackService.updateFeedbackStatus(feedbackId, feedbackUpdateRequest.status)
     }
 
 }

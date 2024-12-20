@@ -21,11 +21,15 @@ class Feedback(
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    val status: FeedbackStatus = FeedbackStatus.PENDING,
+    var status: FeedbackStatus = FeedbackStatus.PENDING,
 
     @Id
     val id: String = UUID.randomUUID().toString()
 
 ) : BaseTime() {
+
+    fun updateStatus(newStatus: FeedbackStatus) {
+        this.status = newStatus
+    }
 
 }

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.OffsetDateTime
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 class ChatThreadService (
     private val chatThreadRepository: ChatThreadRepository
 ) {

@@ -11,13 +11,16 @@ import com.example.chatbot.exception.custom.InvalidEmailOrPasswordException
 import com.example.chatbot.repository.UserRepository
 import com.example.chatbot.util.*
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional(readOnly = true)
 class UserService (
     private val jwtManager: JwtManager,
     private val userRepository: UserRepository
 ){
 
+    @Transactional
     fun createUser(signupRequest: SignupRequest): User {
         if (userRepository.existsByEmail(signupRequest.email)) {
             throw RuntimeException("Email already exists")
@@ -45,6 +48,7 @@ class UserService (
         return users.map { UserResponse.of(it) }
     }
 
+    @Transactional
     fun deleteUser(id: String) {
         val user = userRepository.findByIdOrThrow(id)
         userRepository.delete(user)

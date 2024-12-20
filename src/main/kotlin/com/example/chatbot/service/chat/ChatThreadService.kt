@@ -18,7 +18,6 @@ class ChatThreadService (
     private val chatThreadRepository: ChatThreadRepository
 ) {
 
-    @Transactional
     fun getOrCreateThread(userId: String): ChatThread {
         val recentThread = chatThreadRepository.findByUserIdOrderByUpdatedAtDesc(userId).firstOrNull()
 

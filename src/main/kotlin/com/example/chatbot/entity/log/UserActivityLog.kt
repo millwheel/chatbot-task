@@ -24,4 +24,25 @@ class UserActivityLog (
     var id: String = UUID.randomUUID().toString()
 ){
 
+    companion object {
+        fun ofSignUp(userId: String) : UserActivityLog {
+            return UserActivityLog(
+                userId = userId,
+                userActivityType = UserActivityType.SIGNUP
+            )
+        }
+        fun ofLogin(userId: String) : UserActivityLog {
+            return UserActivityLog (
+                userId = userId,
+                userActivityType = UserActivityType.LOGIN
+            )
+        }
+        fun ofChat(userId: String) : UserActivityLog {
+            return UserActivityLog (
+                userId = userId,
+                userActivityType = UserActivityType.CHAT
+            )
+        }
+
+    }
 }

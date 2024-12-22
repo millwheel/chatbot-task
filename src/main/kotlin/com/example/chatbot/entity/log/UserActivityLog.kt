@@ -9,7 +9,7 @@ import java.util.*
 
 @Entity
 @Table(name = "user_activity_log")
-class UserActivityLogEntity (
+class UserActivityLog (
 
     @Column(nullable = false)
     val userId: String,
@@ -26,22 +26,22 @@ class UserActivityLogEntity (
 ) : LogTimeEntity() {
 
     companion object {
-        fun ofSignUp(userId: String, email: String) : UserActivityLogEntity {
-            return UserActivityLogEntity(
+        fun ofSignUp(userId: String, email: String) : UserActivityLog {
+            return UserActivityLog(
                 userId = userId,
                 email = email,
                 userActivityType = UserActivityType.SIGNUP
             )
         }
-        fun ofLogin(userId: String, email: String) : UserActivityLogEntity {
-            return UserActivityLogEntity (
+        fun ofLogin(userId: String, email: String) : UserActivityLog {
+            return UserActivityLog (
                 userId = userId,
                 email = email,
                 userActivityType = UserActivityType.LOGIN
             )
         }
-        fun ofChat(userId: String, email: String) : UserActivityLogEntity {
-            return UserActivityLogEntity (
+        fun ofChat(userId: String, email: String) : UserActivityLog {
+            return UserActivityLog (
                 userId = userId,
                 email = email,
                 userActivityType = UserActivityType.CHAT

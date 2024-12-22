@@ -9,7 +9,7 @@ import java.util.*
 
 @Entity
 @Table(name = "chat_log")
-class ChatLogEntity (
+class ChatLog (
     @Column(nullable = false)
     val chatId: String,
     @Column(nullable = false)

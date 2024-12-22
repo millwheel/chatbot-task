@@ -1,6 +1,8 @@
 package com.example.chatbot.controller
 
+import com.example.chatbot.dto.report.ChatReportResponse
 import com.example.chatbot.dto.report.UserActivityReportResponse
+import com.example.chatbot.service.report.ChatReportService
 import com.example.chatbot.service.report.UserActivityReportService
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
@@ -10,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/reports")
 @RestController
 class ReportController (
-    private val userActivityReportService: UserActivityReportService
+    private val userActivityReportService: UserActivityReportService,
+    private val chatReportLogService: ChatReportService
 ){
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -21,8 +24,8 @@ class ReportController (
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/chats/today")
-    fun getChatReport(){
-
+    fun getChatReport() : ChatReportResponse {
+        return chatReportLogService.getChatLogs("KR")
     }
 
 }

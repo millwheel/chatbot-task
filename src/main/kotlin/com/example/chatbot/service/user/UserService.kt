@@ -3,6 +3,7 @@ package com.example.chatbot.service.user
 
 import com.example.chatbot.config.security.component.JwtManager
 import com.example.chatbot.dto.user.LoginRequest
+import com.example.chatbot.dto.user.LoginSuccessResponse
 import com.example.chatbot.dto.user.SignupRequest
 import com.example.chatbot.dto.user.UserResponse
 import com.example.chatbot.entity.user.User
@@ -34,13 +35,13 @@ class UserService (
         return userRepository.save(user)
     }
 
-    fun login(loginRequest: LoginRequest) : String{
+    fun login(loginRequest: LoginRequest) : LoginSuccessResponse {
         val user = userRepository.findByEmail(loginRequest.email) ?: throw InvalidEmailOrPasswordException()
         if (!matchesPassword(loginRequest.password, user.password)) {
             throw InvalidEmailOrPasswordException()
         }
-        val generateToken = jwtManager.generateToken(user.id, user.email, user.userRole.name)
-        return generateToken
+        val token = jwtManager.generateToken(user.id, user.email, user.userRole.name)
+        return LoginSuccessResponse(user.id, token)
     }
 
     fun getAllUsers(): List<UserResponse> {

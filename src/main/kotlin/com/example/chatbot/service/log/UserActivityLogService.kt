@@ -11,14 +11,14 @@ class UserActivityLogService (
     val userActivityLogRepository: UserActivityLogRepository
 ) {
 
-    fun createLoginLog(userId: String) {
-        val loginLog = UserActivityLog.ofLogin(userId)
-        userActivityLogRepository.save(loginLog)
-    }
-
     fun createSignUpLog(userId: String) {
         val signUpLog = UserActivityLog.ofSignUp(userId)
         userActivityLogRepository.save(signUpLog)
+    }
+
+    fun createLoginLog(userId: String) {
+        val loginLog = UserActivityLog.ofLogin(userId)
+        userActivityLogRepository.save(loginLog)
     }
 
     fun createChatCreationLog(userId: String) {

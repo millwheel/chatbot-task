@@ -3,10 +3,9 @@ package com.example.chatbot.service.report
 import com.example.chatbot.dto.report.UserActivityReportResponse
 import com.example.chatbot.entity.log.UserActivityType
 import com.example.chatbot.repository.UserActivityLogRepository
+import com.example.chatbot.util.getStartAndEndTimeOfDayByCountryCode
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.OffsetDateTime
-import java.time.ZoneId
 
 @Service
 @Transactional(readOnly = true)
@@ -15,10 +14,8 @@ class UserActivityReportService (
 ){
 
     fun getUserActivityReport(country : String) : UserActivityReportResponse {
-        val zoneId = getZoneIdForCountry(country)
-        val localDate = OffsetDateTime.now().toLocalDate().atStartOfDay(zoneId).toLocalDate()
-        val startTimeOfDay = OffsetDateTime.now().toLocalDate().atStartOfDay(zoneId).toOffsetDateTime()
-        val endTimeOfDay = startTimeOfDay.plusDays(1).minusNanos(1)
+        val (startTimeOfDay, endTimeOfDay) = getStartAndEndTimeOfDayByCountryCode(country)
+        val localTodayDate = startTimeOfDay.toLocalDate()
         val signUpCount = userActivityLogRepository.countByUserActivityTypeAndCreatedAtBetween(
                 UserActivityType.SIGNUP,
                 startTimeOfDay,
@@ -36,17 +33,8 @@ class UserActivityReportService (
                 startTimeOfDay,
                 endTimeOfDay
             )
-        return UserActivityReportResponse.of(signUpCount, loginCount, chatCreationCount, localDate)
+        return UserActivityReportResponse.of(signUpCount, loginCount, chatCreationCount, localTodayDate)
     }
 
-    private fun getZoneIdForCountry(country: String): ZoneId {
-        return when (country.uppercase()) {
-            "US" -> ZoneId.of("America/New_York")
-            "KR" -> ZoneId.of("Asia/Seoul")
-            "JP" -> ZoneId.of("Asia/Tokyo")
-            "IN" -> ZoneId.of("Asia/Kolkata")
-            else -> ZoneId.systemDefault()
-        }
-    }
 
 }

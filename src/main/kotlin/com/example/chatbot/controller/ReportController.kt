@@ -1,5 +1,6 @@
 package com.example.chatbot.controller
 
+import com.example.chatbot.dto.report.UserActivityReportResponse
 import com.example.chatbot.service.report.UserActivityReportService
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,7 +15,8 @@ class ReportController (
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user-activities/today")
-    fun getUserActivityReport() {
+    fun getUserActivityReport() : UserActivityReportResponse {
+        return userActivityReportService.getUserActivityReport("KR")
     }
 
     @PreAuthorize("hasRole('ADMIN')")

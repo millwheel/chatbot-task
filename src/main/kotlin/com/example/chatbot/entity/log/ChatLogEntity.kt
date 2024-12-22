@@ -13,12 +13,15 @@ class ChatLogEntity (
     @Column(nullable = false)
     val chatId: String,
     @Column(nullable = false)
+    val question: String,
+    @Column(nullable = false)
+    val answer: String,
+    @Column(nullable = false)
     val userId: String,
     @Column(nullable = false)
     val email: String,
     @Id
     val id: String = UUID.randomUUID().toString()
 ): LogTimeEntity() {
-
 
 }

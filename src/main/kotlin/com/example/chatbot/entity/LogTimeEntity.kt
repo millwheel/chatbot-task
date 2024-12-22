@@ -9,7 +9,7 @@ import java.time.OffsetDateTime
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
-class LogTimeEntity (
+abstract class LogTimeEntity (
     @CreatedDate
     @Column(updatable = false, name = "created_at")
     var createdAt: OffsetDateTime = OffsetDateTime.now()

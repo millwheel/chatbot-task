@@ -41,7 +41,11 @@ class UserService (
             throw InvalidEmailOrPasswordException()
         }
         val token = jwtManager.generateToken(user.id, user.email, user.userRole.name)
-        return LoginSuccessResponse(user.id, token)
+        return LoginSuccessResponse(user.id, user.email, token)
+    }
+
+    fun getUserById(userId: String): User {
+        return userRepository.findByIdOrThrow(userId)
     }
 
     fun getAllUsers(): List<UserResponse> {

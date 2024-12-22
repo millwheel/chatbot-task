@@ -1,6 +1,6 @@
 package com.example.chatbot.entity.feedback
 
-import com.example.chatbot.entity.BaseTime
+import com.example.chatbot.entity.BasicTimeEntity
 import com.example.chatbot.entity.chat.Chat
 import jakarta.persistence.*
 import java.util.*
@@ -26,7 +26,7 @@ class Feedback(
     @Id
     val id: String = UUID.randomUUID().toString()
 
-) : BaseTime() {
+) : BasicTimeEntity() {
 
     fun updateStatus(newStatus: FeedbackStatus) {
         this.status = newStatus

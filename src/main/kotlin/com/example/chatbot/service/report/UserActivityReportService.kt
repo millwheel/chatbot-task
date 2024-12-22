@@ -19,19 +19,19 @@ class UserActivityReportService (
         val localDate = OffsetDateTime.now().toLocalDate().atStartOfDay(zoneId).toLocalDate()
         val startTimeOfDay = OffsetDateTime.now().toLocalDate().atStartOfDay(zoneId).toOffsetDateTime()
         val endTimeOfDay = startTimeOfDay.plusDays(1).minusNanos(1)
-        val signUpCount = userActivityLogRepository.countByUserActivityTypeAndTimestampBetween(
+        val signUpCount = userActivityLogRepository.countByUserActivityTypeAndCreatedAtBetween(
                 UserActivityType.SIGNUP,
                 startTimeOfDay,
                 endTimeOfDay
             )
         val loginCount =
-            userActivityLogRepository.countByUserActivityTypeAndTimestampBetween(
+            userActivityLogRepository.countByUserActivityTypeAndCreatedAtBetween(
                 UserActivityType.LOGIN,
                 startTimeOfDay,
                 endTimeOfDay
             )
         val chatCreationCount =
-            userActivityLogRepository.countByUserActivityTypeAndTimestampBetween(
+            userActivityLogRepository.countByUserActivityTypeAndCreatedAtBetween(
                 UserActivityType.CHAT,
                 startTimeOfDay,
                 endTimeOfDay

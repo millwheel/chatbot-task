@@ -18,13 +18,13 @@ class AuthController (
     @ResponseStatus(HttpStatus.CREATED)
     fun signUp(@RequestBody signupRequest: SignupRequest) {
         val user = userService.createUser(signupRequest)
-        userActivityLogService.createSignUpLog(user.id)
+        userActivityLogService.createSignUpLog(user.id, user.email)
     }
 
     @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest): String {
         val loginSuccessResponse = userService.login(loginRequest)
-        userActivityLogService.createLoginLog(loginSuccessResponse.userId)
+        userActivityLogService.createLoginLog(loginSuccessResponse.userId, loginSuccessResponse.email)
         return loginSuccessResponse.token
     }
 }

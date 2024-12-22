@@ -4,6 +4,7 @@ import com.example.chatbot.dto.chat.ChatRequest
 import com.example.chatbot.dto.chat.ChatResponse
 import com.example.chatbot.service.chat.ChatService
 import com.example.chatbot.service.log.UserActivityLogService
+import com.example.chatbot.service.user.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/chats")
 class ChatController (
+    private val userService: UserService,
     private val chatService: ChatService,
     private val userActivityLogService: UserActivityLogService
 ) {
@@ -22,8 +24,9 @@ class ChatController (
         @RequestAttribute userId: String,
         @RequestBody chatRequest: ChatRequest
     ): ChatResponse {
+        val user = userService.getUserById(userId)
         val chat = chatService.createChat(userId, chatRequest)
-        userActivityLogService.createChatCreationLog(userId)
+        userActivityLogService.createChatCreationLog(userId, user.email)
         return ChatResponse.of(chat)
     }
 

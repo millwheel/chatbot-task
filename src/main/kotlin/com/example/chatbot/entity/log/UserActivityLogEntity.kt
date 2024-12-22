@@ -1,45 +1,49 @@
 package com.example.chatbot.entity.log
 
+import com.example.chatbot.entity.LogTimeEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import java.time.OffsetDateTime
 import java.util.*
 
 @Entity
 @Table(name = "user_activity_log")
-class UserActivityLog (
+class UserActivityLogEntity (
 
     @Column(nullable = false)
     val userId: String,
 
     @Column(nullable = false)
-    val userActivityType: UserActivityType,
+    val email: String,
 
     @Column(nullable = false)
-    val timestamp: OffsetDateTime = OffsetDateTime.now(),
+    val userActivityType: UserActivityType,
 
     @Id
     var id: String = UUID.randomUUID().toString()
-){
+
+) : LogTimeEntity() {
 
     companion object {
-        fun ofSignUp(userId: String) : UserActivityLog {
-            return UserActivityLog(
+        fun ofSignUp(userId: String, email: String) : UserActivityLogEntity {
+            return UserActivityLogEntity(
                 userId = userId,
+                email = email,
                 userActivityType = UserActivityType.SIGNUP
             )
         }
-        fun ofLogin(userId: String) : UserActivityLog {
-            return UserActivityLog (
+        fun ofLogin(userId: String, email: String) : UserActivityLogEntity {
+            return UserActivityLogEntity (
                 userId = userId,
+                email = email,
                 userActivityType = UserActivityType.LOGIN
             )
         }
-        fun ofChat(userId: String) : UserActivityLog {
-            return UserActivityLog (
+        fun ofChat(userId: String, email: String) : UserActivityLogEntity {
+            return UserActivityLogEntity (
                 userId = userId,
+                email = email,
                 userActivityType = UserActivityType.CHAT
             )
         }

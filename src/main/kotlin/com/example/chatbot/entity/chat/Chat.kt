@@ -1,6 +1,6 @@
 package com.example.chatbot.entity.chat
 
-import com.example.chatbot.entity.BaseTime
+import com.example.chatbot.entity.BasicTimeEntity
 import jakarta.persistence.*
 import java.util.*
 
@@ -18,7 +18,7 @@ class Chat constructor (
 
     @Id
     val id: String = UUID.randomUUID().toString(),
-) : BaseTime() {
+) : BasicTimeEntity() {
 
 
 }

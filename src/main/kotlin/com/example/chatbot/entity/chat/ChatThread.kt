@@ -1,6 +1,6 @@
 package com.example.chatbot.entity.chat
 
-import com.example.chatbot.entity.BaseTime
+import com.example.chatbot.entity.BasicTimeEntity
 import jakarta.persistence.*
 import java.util.*
 
@@ -13,7 +13,7 @@ class ChatThread constructor (
     val chats: MutableList<Chat> = mutableListOf(),
     @Id
     val id: String = UUID.randomUUID().toString()
-) : BaseTime() {
+) : BasicTimeEntity() {
 
 
 }

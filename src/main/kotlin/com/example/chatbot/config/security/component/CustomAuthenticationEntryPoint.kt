@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.stereotype.Component
+import java.time.Instant
 
 @Component
 class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
@@ -17,11 +18,9 @@ class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
         response.writer.write(
             """
             {
-                "timestamp": "${java.time.Instant.now()}",
+                "timestamp": "${Instant.now()}",
                 "status": 401,
-                "error": "Unauthorized",
                 "message": "Authentication is required to access this resource",
-                "path": "${request.requestURI}"
             }
             """.trimIndent()
         )

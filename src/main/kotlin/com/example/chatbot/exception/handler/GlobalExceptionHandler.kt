@@ -15,6 +15,20 @@ class GlobalExceptionHandler {
 
     private val logger = KotlinLogging.logger {}
 
+    @ExceptionHandler(RuntimeException::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun handleRuntimeException(ex: RuntimeException): ErrorResult {
+        logger.error{ ex.message }
+        return ErrorResult.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.message!!)
+    }
+
+    @ExceptionHandler(AccessDeniedException::class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    fun handleAccessDeniedException(ex: AccessDeniedException): ErrorResult {
+        logger.error { "${ex.message}" }
+        return ErrorResult.of(HttpStatus.FORBIDDEN, ex.message!!)
+    }
+
     @ExceptionHandler(InvalidEmailOrPasswordException::class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     fun handleInvalidEmailOrPasswordException(ex: InvalidEmailOrPasswordException): ErrorResult {
@@ -34,13 +48,6 @@ class GlobalExceptionHandler {
     fun handleNotThreadOwnerException(ex: NotThreadOwnerException): ErrorResult {
         logger.error{ ex.message }
         return ErrorResult.of(HttpStatus.FORBIDDEN, ex.message!!)
-    }
-
-    @ExceptionHandler(RuntimeException::class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    fun handleRuntimeException(ex: RuntimeException): ErrorResult {
-        logger.error{ ex.message }
-        return ErrorResult.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.message!!)
     }
 
 }

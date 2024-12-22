@@ -13,7 +13,7 @@ class ChatReportService (
     private val chatLogRepository: ChatLogRepository
 ){
 
-    fun getChatLogs(countryCode: String) : ChatReportResponse {
+    fun getChatReport(countryCode: String) : ChatReportResponse {
         val (startTimeOfDay, endTimeOfDay) = getStartAndEndTimeOfDayByCountryCode(countryCode)
         val localTodayDate = startTimeOfDay.toLocalDate()
         val chatLogs = chatLogRepository.findByCreatedAtBetween(startTimeOfDay, endTimeOfDay)

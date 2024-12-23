@@ -20,16 +20,12 @@ class ChatService (
 ){
 
     @Transactional
-    fun createChat(userId: String, chatRequest: ChatRequest): Chat {
+    fun createChat(userId: String, model: String, isStreaming: Boolean, chatRequest: ChatRequest): Chat {
         val chatThread = chatThreadService.getOrCreateThread(userId)
 
         val question = chatRequest.question
-        val model = chatRequest.model ?: "gpt-4o-mini"
-        // TODO open ai 응답 stream 형태로 처리 기능 추가
-        val isStreaming = chatRequest.isStreaming ?: false
-
-        val response = openaiApiSender.sendRequestAndGetResponse(question, model)
-        val answer = parseAnswerFromResponse(response)
+        val result = openaiApiSender.sendRequestAndGetResponse(question, model)
+        val answer = parseAnswerFromResponse(result)
 
         val chat = Chat(
             question = question,

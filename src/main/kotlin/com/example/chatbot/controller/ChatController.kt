@@ -30,10 +30,12 @@ class ChatController (
     @ResponseStatus(HttpStatus.CREATED)
     fun createChat(
         @RequestAttribute userId: String,
+        @RequestParam model: String = "gpt-4o-mini",
+        @RequestParam isStreaming: Boolean = false,
         @RequestBody chatRequest: ChatRequest
     ): ChatResponse {
         val user = userService.getUserById(userId)
-        val chat = chatService.createChat(userId, chatRequest)
+        val chat = chatService.createChat(userId, model, isStreaming, chatRequest)
         userActivityLogService.createChatCreationLog(userId, user.email)
         chatLogService.createChatLog(chat, user)
         return ChatResponse.of(chat)

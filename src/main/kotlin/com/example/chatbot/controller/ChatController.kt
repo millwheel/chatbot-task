@@ -65,8 +65,8 @@ class ChatController (
     private fun groupChatsByThread(chats: Page<Chat>) =
         chats
             .groupBy { it.chatThread.id }
-            .map { (threadId, threadChats) ->
-                ChatThreadResponse.fromChats(threadId, threadChats)
+            .map { (threadId, chats) ->
+                ChatThreadResponse.fromChats(threadId, chats)
             }
 
 }

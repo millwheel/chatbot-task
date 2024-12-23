@@ -9,6 +9,7 @@ import com.example.chatbot.service.chat.ChatService
 import com.example.chatbot.service.log.ChatLogService
 import com.example.chatbot.service.log.UserActivityLogService
 import com.example.chatbot.service.user.UserService
+import com.example.chatbot.validator.PaginationValidator
 import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
@@ -20,7 +21,8 @@ class ChatController (
     private val userService: UserService,
     private val chatService: ChatService,
     private val chatLogService: ChatLogService,
-    private val userActivityLogService: UserActivityLogService
+    private val userActivityLogService: UserActivityLogService,
+    private val paginationValidator: PaginationValidator
 ) {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER')")
@@ -44,6 +46,7 @@ class ChatController (
         @RequestParam(defaultValue = "10") pageSize: Int,
         @RequestParam(defaultValue = "desc") orderDirection: String
     ) : ResponseResult<List<ChatThreadResponse>> {
+        paginationValidator.validateParameter(pageIndex, pageSize, orderDirection)
         val chats = chatService.getAllChats(pageIndex, pageSize, orderDirection)
         val chatThreadResponses = groupChatsByThread(chats)
         return ResponseResult(chatThreadResponses)
@@ -57,6 +60,7 @@ class ChatController (
         @RequestParam(defaultValue = "10") pageSize: Int,
         @RequestParam(defaultValue = "desc") orderDirection: String
     ) : ResponseResult<List<ChatThreadResponse>> {
+        paginationValidator.validateParameter(pageIndex, pageSize, orderDirection)
         val chats = chatService.getChatsByUser(userId, pageIndex, pageSize, orderDirection)
         val chatThreadResponses = groupChatsByThread(chats)
         return ResponseResult(chatThreadResponses)

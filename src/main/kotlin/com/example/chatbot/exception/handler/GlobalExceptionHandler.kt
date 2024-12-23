@@ -1,5 +1,6 @@
 package com.example.chatbot.exception.handler
 
+import com.example.chatbot.exception.custom.BadRequestException
 import com.example.chatbot.exception.custom.DataNotFoundException
 import com.example.chatbot.exception.custom.InvalidEmailOrPasswordException
 import com.example.chatbot.exception.custom.NotThreadOwnerException
@@ -44,6 +45,13 @@ class GlobalExceptionHandler {
     fun handleNotThreadOwnerException(ex: NotThreadOwnerException): ErrorResult {
         logger.error{ ex.message }
         return ErrorResult.of(HttpStatus.FORBIDDEN, ex.message!!)
+    }
+
+    @ExceptionHandler(BadRequestException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleBadRequestException(ex: BadRequestException): ErrorResult {
+        logger.error{ ex.message }
+        return ErrorResult.of(HttpStatus.BAD_REQUEST, ex.message!!)
     }
 
 }

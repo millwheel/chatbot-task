@@ -5,6 +5,7 @@ import com.example.chatbot.dto.feedback.FeedbackResponse
 import com.example.chatbot.dto.feedback.FeedbackUpdateRequest
 import com.example.chatbot.entity.feedback.FeedbackStatus
 import com.example.chatbot.service.feedback.FeedbackService
+import com.example.chatbot.validator.PaginationValidator
 import org.springframework.data.domain.Page
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/feedbacks")
 class FeedbackController(
-    private val feedbackService: FeedbackService
+    private val feedbackService: FeedbackService,
+    private val paginationValidator: PaginationValidator
 ) {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -23,6 +25,7 @@ class FeedbackController(
         @RequestParam(defaultValue = "10") pageSize: Int,
         @RequestParam(defaultValue = "desc") orderDirection: String
     ): Page<FeedbackResponse> {
+        paginationValidator.validateParameter(pageIndex, pageSize, orderDirection)
         return feedbackService.getAllFeedbacks(isPositive, pageIndex, pageSize, orderDirection)
     }
 
@@ -35,6 +38,7 @@ class FeedbackController(
         @RequestParam(defaultValue = "10") pageSize: Int,
         @RequestParam(defaultValue = "desc") orderDirection: String
         ): Page<FeedbackResponse> {
+        paginationValidator.validateParameter(pageIndex, pageSize, orderDirection)
         return feedbackService.getUserFeedbacks(userId, isPositive, pageIndex, pageSize, orderDirection)
     }
 

@@ -48,7 +48,7 @@ class ChatService (
 
     fun getChatsByUser(userId: String, pageIndex: Int, pageSize: Int, orderDirection: String): Page<Chat> {
         val pageable = createPageable(pageIndex, pageSize, orderDirection)
-        return chatRepository.findAll(pageable)
+        return chatRepository.findByUserId(userId, pageable)
     }
 
 }

@@ -19,14 +19,10 @@ class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun handleRuntimeException(ex: RuntimeException): ErrorResult {
         logger.error{ ex.message }
+        if (ex.message == "Access Denied") {
+            return ErrorResult.of(HttpStatus.FORBIDDEN, "You do not have permission to access this resource")
+        }
         return ErrorResult.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.message!!)
-    }
-
-    @ExceptionHandler(AccessDeniedException::class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    fun handleAccessDeniedException(ex: AccessDeniedException): ErrorResult {
-        logger.error { "${ex.message}" }
-        return ErrorResult.of(HttpStatus.FORBIDDEN, ex.message!!)
     }
 
     @ExceptionHandler(InvalidEmailOrPasswordException::class)

@@ -5,13 +5,13 @@ import java.time.Instant
 
 data class ErrorResult(
     val timestamp: Instant = Instant.now(),
-    val status: HttpStatus,
+    val status: Int,
     val message: String
 ) {
     companion object {
         fun of(status: HttpStatus, message: String): ErrorResult {
             return ErrorResult(
-                status = status,
+                status = status.value(),
                 message = message
             )
         }

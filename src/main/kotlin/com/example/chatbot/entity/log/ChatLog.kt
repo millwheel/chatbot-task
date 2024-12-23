@@ -12,9 +12,9 @@ import java.util.*
 class ChatLog constructor (
     @Column(nullable = false)
     val chatId: String,
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     val question: String,
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     val answer: String,
     @Column(nullable = false)
     val userId: String,

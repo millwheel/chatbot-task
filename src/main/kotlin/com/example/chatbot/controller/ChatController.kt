@@ -16,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.time.Duration
 
 
 @RestController
@@ -39,12 +38,22 @@ class ChatController (
         @RequestBody chatRequest: ChatRequest
     ): Flux<ServerSentEvent<String>> {
 
-        return chatService.createChat(userId, model, isStreaming, chatRequest)
+        val responseStream = chatService.createAnswer(userId, model, isStreaming, chatRequest)
 
-//        val user = userService.getUserById(userId)
-//        userActivityLogService.createChatCreationLog(userId, user.email)
-//        chatLogService.createChatLog(chat, user)
-//        return ChatResponse.of(chat)
+        responseStream
+            .mapNotNull { it.data() }
+            .collectList()
+            .flatMap {
+                answers ->
+                val fullAnswer = answers.joinToString("")
+                val chat = chatService.createChat(userId, chatRequest.question, fullAnswer)
+                val user = userService.getUserById(userId)
+                userActivityLogService.createChatCreationLog(userId, user.email)
+                chatLogService.createChatLog(chat, user)
+                Mono.empty<Void>()
+            }
+
+        return responseStream
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")

@@ -11,28 +11,23 @@ import org.springframework.data.domain.Page
 import org.springframework.http.codec.ServerSentEvent
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import reactor.core.publisher.Flux
-import reactor.core.scheduler.Schedulers
 import java.time.Duration
 
 
 @Service
-@Transactional(readOnly = true)
 class ChatService (
     private val chatThreadService: ChatThreadService,
     private val chatRepository: ChatRepository,
     private val openaiApiSender: OpenaiApiSender
 ){
 
-    @Transactional
-    fun createChat(userId: String, model: String, isStreaming: Boolean, chatRequest: ChatRequest): Flux<ServerSentEvent<String>> {
-//        val chatThread = chatThreadService.getOrCreateThread(userId)
+    fun createAnswer(userId: String, model: String, isStreaming: Boolean, chatRequest: ChatRequest): Flux<ServerSentEvent<String>> {
         val question = chatRequest.question
-
         val responseStream: Flux<ServerSentEvent<String>>
         if (isStreaming) {
             responseStream = openaiApiSender.sendRequestAndStreamResponse(question, model)
+                .doOnNext { data -> println("Data: $data") }
                 .doOnComplete { println("Stream complete for client") }
                 .doOnCancel { println("Stream cancelled by client") }
                 .delayElements(Duration.ofMillis(50))
@@ -42,24 +37,30 @@ class ChatService (
                 }
         } else {
             responseStream = Flux.just(openaiApiSender.sendRequestAndGetResponse(question, model))
+                .doOnNext { data -> println("Data: $data") }
                 .map { data ->
                     val answer = extractAnswerFromResponse(data)
                     ServerSentEvent.builder<String>().data(answer).build()
                 }
         }
-
         return responseStream
-
-//        val chat = Chat(question, answer, chatThread)
-//        chatThreadService.updateThreadTimestamp(chatThread)
-//        return chatRepository.save(chat)
     }
 
+    @Transactional
+    fun createChat(userId: String, question: String, answer: String): Chat {
+        val chatThread = chatThreadService.getOrCreateThread(userId)
+        val chat = Chat(question, answer, chatThread)
+        chatThreadService.updateThreadTimestamp(chatThread)
+        return chatRepository.save(chat)
+    }
+
+    @Transactional(readOnly = true)
     fun getAllChats(pageIndex: Int, pageSize: Int, orderDirection: String): Page<Chat> {
         val pageable = createPageable(pageIndex, pageSize, orderDirection)
         return chatRepository.findAll(pageable)
     }
 
+    @Transactional(readOnly = true)
     fun getChatsByUser(userId: String, pageIndex: Int, pageSize: Int, orderDirection: String): Page<Chat> {
         val pageable = createPageable(pageIndex, pageSize, orderDirection)
         return chatRepository.findByUserId(userId, pageable)

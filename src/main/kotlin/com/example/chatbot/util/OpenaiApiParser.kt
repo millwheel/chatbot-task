@@ -7,7 +7,7 @@ fun extractAnswerFromResponse(responseJson: String): String {
     val objectMapper = jacksonObjectMapper()
     val root: JsonNode = objectMapper.readTree(responseJson)
     val content = root.get("choices")
-        .get(0)
+        ?.get(0)
         ?.path("message")
         ?.path("content")
         ?.asText() ?: ""
@@ -15,10 +15,13 @@ fun extractAnswerFromResponse(responseJson: String): String {
 }
 
 fun extractAnswerFromResponseStream(responseJson: String): String {
+    if (responseJson == "[DONE]") {
+        return ""
+    }
     val objectMapper = jacksonObjectMapper()
     val root: JsonNode = objectMapper.readTree(responseJson)
     val content = root.path("choices")
-        .get(0)
+        ?.get(0)
         ?.path("delta")
         ?.path("content")
         ?.asText() ?: ""

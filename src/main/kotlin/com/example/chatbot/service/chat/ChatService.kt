@@ -4,7 +4,9 @@ import com.example.chatbot.dto.chat.ChatRequest
 import com.example.chatbot.entity.chat.Chat
 import com.example.chatbot.repository.ChatRepository
 import com.example.chatbot.sender.OpenaiApiSender
+import com.example.chatbot.util.createPageable
 import com.example.chatbot.util.parseAnswerFromResponse
+import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -37,6 +39,16 @@ class ChatService (
 
         chatThreadService.updateThreadTimestamp(chatThread)
         return chatRepository.save(chat)
+    }
+
+    fun getAllChats(pageIndex: Int, pageSize: Int, orderDirection: String): Page<Chat> {
+        val pageable = createPageable(pageIndex, pageSize, orderDirection)
+        return chatRepository.findAll(pageable)
+    }
+
+    fun getChatsByUser(userId: String, pageIndex: Int, pageSize: Int, orderDirection: String): Page<Chat> {
+        val pageable = createPageable(pageIndex, pageSize, orderDirection)
+        return chatRepository.findAll(pageable)
     }
 
 }

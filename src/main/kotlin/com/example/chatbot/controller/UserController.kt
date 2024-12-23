@@ -15,7 +15,7 @@ class UserController (
     val userService: UserService
 ) {
 
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     fun getUsers() : ResponseResult<List<UserResponse>> {
         return ResponseResult(userService.getAllUsers())

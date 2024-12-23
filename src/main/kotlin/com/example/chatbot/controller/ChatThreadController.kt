@@ -19,13 +19,13 @@ class ChatThreadController (
         @RequestParam(defaultValue = "10") pageSize: Int,
         @RequestParam(defaultValue = "desc") orderDirection: String
     ): Page<ChatThreadResponse> {
-        val threads = chatThreadService.getAllTread(pageIndex, pageSize, orderDirection)
+        val threads = chatThreadService.getAllTreads(pageIndex, pageSize, orderDirection)
         return threads.map { ChatThreadResponse.of(it) }
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER')")
     @GetMapping("/me")
-    fun getThreadsByUser(
+    fun getMyThreads(
         @RequestAttribute userId: String,
         @RequestParam(defaultValue = "0") pageIndex: Int,
         @RequestParam(defaultValue = "10") pageSize: Int,

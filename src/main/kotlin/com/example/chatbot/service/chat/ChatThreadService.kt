@@ -6,9 +6,6 @@ import com.example.chatbot.repository.ChatThreadRepository
 import com.example.chatbot.util.createPageable
 import com.example.chatbot.util.findByIdOrThrow
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.OffsetDateTime
@@ -36,7 +33,7 @@ class ChatThreadService (
         chatThreadRepository.save(chatThread)
     }
 
-    fun getAllTread(pageIndex: Int, pageSize: Int, orderDirection: String): Page<ChatThread> {
+    fun getAllTreads(pageIndex: Int, pageSize: Int, orderDirection: String): Page<ChatThread> {
         val pageable = createPageable(pageIndex, pageSize, orderDirection)
         return chatThreadRepository.findAll(pageable)
     }

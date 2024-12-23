@@ -9,6 +9,7 @@ import com.example.chatbot.util.parseAnswerFromResponse
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import reactor.core.scheduler.Schedulers
 
 
 @Service
@@ -22,17 +23,17 @@ class ChatService (
     @Transactional
     fun createChat(userId: String, model: String, isStreaming: Boolean, chatRequest: ChatRequest): Chat {
         val chatThread = chatThreadService.getOrCreateThread(userId)
-
         val question = chatRequest.question
+
+        // stream 사용 함
+        if (isStreaming) {
+            openaiApiSender.sendRequestAndStreamResponse(question, model)
+        }
+        // stream 사용 안함
         val result = openaiApiSender.sendRequestAndGetResponse(question, model)
         val answer = parseAnswerFromResponse(result)
 
-        val chat = Chat(
-            question = question,
-            answer = answer,
-            chatThread = chatThread
-        )
-
+        val chat = Chat(question, answer, chatThread)
         chatThreadService.updateThreadTimestamp(chatThread)
         return chatRepository.save(chat)
     }

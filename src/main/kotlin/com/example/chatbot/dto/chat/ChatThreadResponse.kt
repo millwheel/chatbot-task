@@ -6,28 +6,22 @@ import java.time.OffsetDateTime
 
 data class ChatThreadResponse (
     val threadId: String,
-    val chats: MutableList<ChatResponse>,
+    val chats: List<ChatResponse>,
     val createdAt: OffsetDateTime
 ) {
     companion object {
         fun of (chatThread: ChatThread): ChatThreadResponse {
             return ChatThreadResponse(
                 threadId = chatThread.id,
-                chats = chatThread.chats.map { ChatResponse.of(it) }.toMutableList(),
+                chats = chatThread.chats.map { ChatResponse.of(it) },
                 createdAt = chatThread.createdAt
             )
         }
 
-        fun ofChat(chat: Chat): ChatThreadResponse {
-            return ChatThreadResponse(
-                threadId = chat.chatThread.id,
-                chats = mutableListOf(ChatResponse.of(chat)),
-                createdAt = chat.chatThread.createdAt
-            )
+        fun fromChats(threadId: String, chats: List<Chat>): ChatThreadResponse {
+            val chatResponses = chats.map { ChatResponse.of(it) }
+            val createdAt = chats.first().chatThread.createdAt
+            return ChatThreadResponse(threadId, chatResponses, createdAt)
         }
-    }
-
-    fun addChat(chat: Chat) {
-        chats.add(ChatResponse.of(chat))
     }
 }

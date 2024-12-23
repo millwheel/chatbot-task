@@ -4,6 +4,7 @@ import com.example.chatbot.dto.ResponseResult
 import com.example.chatbot.dto.chat.ChatRequest
 import com.example.chatbot.dto.chat.ChatResponse
 import com.example.chatbot.dto.chat.ChatThreadResponse
+import com.example.chatbot.entity.chat.Chat
 import com.example.chatbot.service.chat.ChatService
 import com.example.chatbot.service.log.ChatLogService
 import com.example.chatbot.service.log.UserActivityLogService
@@ -44,18 +45,8 @@ class ChatController (
         @RequestParam(defaultValue = "desc") orderDirection: String
     ) : ResponseResult<List<ChatThreadResponse>> {
         val chats = chatService.getAllChats(pageIndex, pageSize, orderDirection)
-        val hashMap = HashMap<String, ChatThreadResponse>()
-        for (chat in chats) {
-            var chatThreadResponse = hashMap.get(chat.chatThread.id)
-            if (chatThreadResponse == null) {
-                chatThreadResponse = ChatThreadResponse.ofChat(chat)
-            } else {
-                chatThreadResponse.addChat(chat)
-            }
-            hashMap.put(chat.chatThread.id, chatThreadResponse)
-        }
-        val map = hashMap.map { it.value }
-        return ResponseResult(map)
+        val chatThreadResponses = groupChatsByThread(chats)
+        return ResponseResult(chatThreadResponses)
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER')")
@@ -67,18 +58,15 @@ class ChatController (
         @RequestParam(defaultValue = "desc") orderDirection: String
     ) : ResponseResult<List<ChatThreadResponse>> {
         val chats = chatService.getChatsByUser(userId, pageIndex, pageSize, orderDirection)
-        val hashMap = HashMap<String, ChatThreadResponse>()
-        for (chat in chats) {
-            var chatThreadResponse = hashMap.get(chat.chatThread.id)
-            if (chatThreadResponse == null) {
-                chatThreadResponse = ChatThreadResponse.ofChat(chat)
-            } else {
-                chatThreadResponse.addChat(chat)
-            }
-            hashMap.put(chat.chatThread.id, chatThreadResponse)
-        }
-        val map = hashMap.map { it.value }
-        return ResponseResult(map)
+        val chatThreadResponses = groupChatsByThread(chats)
+        return ResponseResult(chatThreadResponses)
     }
+
+    private fun groupChatsByThread(chats: Page<Chat>) =
+        chats
+            .groupBy { it.chatThread.id }
+            .map { (threadId, threadChats) ->
+                ChatThreadResponse.fromChats(threadId, threadChats)
+            }
 
 }

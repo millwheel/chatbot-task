@@ -29,11 +29,11 @@ class ReportController (
         return chatReportLogService.getChatReport("KR")
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/chats/today/csv")
     fun getChatReportAsCsv(response: HttpServletResponse) {
         val chatReport = chatReportLogService.getChatReport("KR")
-        response.setHeader("Content-Type", "text/csv")
+        response.setHeader("Content-Type", "text/csv; charset=UTF-8")
         response.setHeader("Content-Disposition", "attachment; filename=\"chat_report_${chatReport.date}.csv\"")
         response.writer.use { writer ->
             writer.append("Question,Answer,User Email\n")

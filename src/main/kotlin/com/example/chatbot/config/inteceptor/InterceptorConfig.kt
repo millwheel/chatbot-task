@@ -14,6 +14,6 @@ class InterceptorConfig (
         registry.addInterceptor(userIdInterceptor)
             .order(1)
             .addPathPatterns("/**")
-            .excludePathPatterns("/actuator/**", "/error/**", "/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/docs/**", "/swagger-resources/**")
+            .excludePathPatterns("/actuator/**", "/error/**", "/auth/**", "/reports/**", "/swagger-ui/**", "/v3/api-docs/**", "/docs/**", "/swagger-resources/**")
     }
 }

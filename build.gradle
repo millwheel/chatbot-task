@@ -43,6 +43,8 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+    // CSV
+    implementation 'com.opencsv:opencsv:5.5'
     // JSON
     implementation 'org.json:json:20230227'
     // test

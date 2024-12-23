@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @Component
 class OpenaiApiSender(
@@ -26,7 +27,8 @@ class OpenaiApiSender(
         .defaultHeader("Content-Type", "application/json")
         .build()
 
-    fun sendRequestAndGetResponse(text: String, model: String): String{
+
+    fun sendRequestAndGetResponse(text: String, model: String): String {
         val result = restClient.post()
             .body(buildRequestBody(text, model, false))
             .retrieve()

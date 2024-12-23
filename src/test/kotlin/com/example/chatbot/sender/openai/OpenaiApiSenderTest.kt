@@ -18,7 +18,7 @@ class OpenaiApiSenderTest (
 
     @Test
     fun testOpenAiApi() {
-        val response = openaiApiSender.sendRequestAndGetResponse("Kotlin은 무슨 이유로 만들어졌지?", "gpt-4o-mini")
+        val response = openaiApiSender.sendRequestAndGetResponse("1+1은 뭐야?", "gpt-4o-mini")
         val answer = extractAnswerFromResponse(response)
         print(answer)
     }
@@ -26,7 +26,7 @@ class OpenaiApiSenderTest (
     @Test
     fun testOpenAiApiWithStream() {
         val latch = CountDownLatch(1)
-        openaiApiSender.sendRequestAndStreamResponse("Kotlin은 무슨 이유로 만들어졌지?", "gpt-4o-mini")
+        openaiApiSender.sendRequestAndStreamResponse("1+1은 뭐야?", "gpt-4o-mini")
             .subscribeOn(Schedulers.boundedElastic())
             .doOnNext { chunk ->
                 println(chunk)

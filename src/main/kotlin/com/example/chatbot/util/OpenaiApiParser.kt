@@ -4,7 +4,7 @@ import com.example.chatbot.sender.dto.OpenaiResponse
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 
-fun parseAnswerFromResponse(responseJson: String): String {
+fun extractAnswerFromResponse(responseJson: String): String {
     val objectMapper = jacksonObjectMapper()
     val openaiResponse: OpenaiResponse = objectMapper.readValue(responseJson)
 

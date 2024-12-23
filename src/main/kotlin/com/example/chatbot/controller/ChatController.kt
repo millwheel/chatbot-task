@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 
 @RestController
 @RequestMapping("/chats")
@@ -33,12 +34,12 @@ class ChatController (
         @RequestParam model: String = "gpt-4o-mini",
         @RequestParam isStreaming: Boolean = false,
         @RequestBody chatRequest: ChatRequest
-    ): ChatResponse {
-        val user = userService.getUserById(userId)
-        val chat = chatService.createChat(userId, model, isStreaming, chatRequest)
-        userActivityLogService.createChatCreationLog(userId, user.email)
-        chatLogService.createChatLog(chat, user)
-        return ChatResponse.of(chat)
+    ): SseEmitter {
+        return chatService.createChat(userId, model, isStreaming, chatRequest)
+//        val user = userService.getUserById(userId)
+//        userActivityLogService.createChatCreationLog(userId, user.email)
+//        chatLogService.createChatLog(chat, user)
+//        return ChatResponse.of(chat)
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")

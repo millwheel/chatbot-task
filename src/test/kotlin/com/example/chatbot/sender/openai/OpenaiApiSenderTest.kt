@@ -1,11 +1,10 @@
 package com.example.chatbot.sender.openai
 
 import com.example.chatbot.sender.OpenaiApiSender
-import com.example.chatbot.util.parseAnswerFromResponse
+import com.example.chatbot.util.extractAnswerFromResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import reactor.core.publisher.Flux
 import reactor.core.scheduler.Schedulers
 import java.util.concurrent.CountDownLatch
 import kotlin.test.Test
@@ -20,7 +19,7 @@ class OpenaiApiSenderTest (
     @Test
     fun testOpenAiApi() {
         val response = openaiApiSender.sendRequestAndGetResponse("Kotlin은 무슨 이유로 만들어졌지?", "gpt-4o-mini")
-        val answer = parseAnswerFromResponse(response)
+        val answer = extractAnswerFromResponse(response)
         print(answer)
     }
 

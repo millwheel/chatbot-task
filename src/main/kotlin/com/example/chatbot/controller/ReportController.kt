@@ -22,21 +22,21 @@ class ReportController (
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user-activities/today")
-    fun getUserActivityReport(@RequestHeader("Accept-Language") acceptLanguage: String) : UserActivityReportResponse {
+    fun getUserActivityReport(@RequestHeader("Accept-Language", required = false) acceptLanguage: String?) : UserActivityReportResponse {
         val countryCode = extractCountryFromHeader(acceptLanguage)
         return userActivityReportService.getUserActivityReport(countryCode)
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/chats/today")
-    fun getChatReport(@RequestHeader("Accept-Language") acceptLanguage: String) : ChatReportResponse {
+    fun getChatReport(@RequestHeader("Accept-Language", required = false) acceptLanguage: String?) : ChatReportResponse {
         val countryCode = extractCountryFromHeader(acceptLanguage)
         return chatReportLogService.getChatReport(countryCode)
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/chats/today/csv")
-    fun getChatReportAsCsv(@RequestHeader("Accept-Language") acceptLanguage: String) : ResponseEntity<ByteArray> {
+    fun getChatReportAsCsv(@RequestHeader("Accept-Language", required = false) acceptLanguage: String?) : ResponseEntity<ByteArray> {
         val countryCode = extractCountryFromHeader(acceptLanguage)
         val chatReportResponse = chatReportLogService.getChatReport(countryCode)
         val csvContentByteArray = buildString {

@@ -25,12 +25,14 @@ class JwtAuthenticationFilter(
 
         if (token != null && jwtManager.validateToken(token)) {
             val claims = jwtManager.getClaims(token)
-            val email = claims?.subject
+            val id = claims?.subject
+            val email = claims?.get("email").toString()
             val role = claims?.get("role")
 
-            if (email != null && role != null && securityContext.authentication == null) {
+            if (id != null && securityContext.authentication == null) {
+                val principal = CustomPrincipal(id, email)
                 val authorities = listOf(SimpleGrantedAuthority("ROLE_$role"))
-                val authentication = UsernamePasswordAuthenticationToken(email, null, authorities)
+                val authentication = UsernamePasswordAuthenticationToken(principal, null, authorities)
                 authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
                 securityContext.authentication = authentication
             }

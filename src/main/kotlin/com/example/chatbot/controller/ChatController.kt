@@ -1,5 +1,6 @@
 package com.example.chatbot.controller
 
+import com.example.chatbot.config.security.component.CustomPrincipal
 import com.example.chatbot.dto.ResponseResult
 import com.example.chatbot.dto.chat.ChatRequest
 import com.example.chatbot.dto.chat.ChatThreadResponse
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import org.springframework.http.codec.ServerSentEvent
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -32,12 +35,12 @@ class ChatController (
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createChat(
-        @RequestAttribute userId: String,
+        @AuthenticationPrincipal principal: CustomPrincipal,
         @RequestParam model: String = "gpt-4o-mini",
         @RequestParam isStreaming: Boolean = false,
         @RequestBody chatRequest: ChatRequest
     ): Flux<ServerSentEvent<String>> {
-
+        val userId = principal.userId
         val responseStream = chatService.createAnswer(userId, model, isStreaming, chatRequest)
 
         responseStream
@@ -72,13 +75,13 @@ class ChatController (
     @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER')")
     @GetMapping("/me")
     fun getMyThreads(
-        @RequestAttribute userId: String,
+        @AuthenticationPrincipal principal: CustomPrincipal,
         @RequestParam(defaultValue = "0") pageIndex: Int,
         @RequestParam(defaultValue = "10") pageSize: Int,
         @RequestParam(defaultValue = "desc") orderDirection: String
     ) : ResponseResult<List<ChatThreadResponse>> {
         paginationValidator.validateParameter(pageIndex, pageSize, orderDirection)
-        val chats = chatService.getChatsByUser(userId, pageIndex, pageSize, orderDirection)
+        val chats = chatService.getChatsByUser(principal.userId, pageIndex, pageSize, orderDirection)
         val chatThreadResponses = groupChatsByThread(chats)
         return ResponseResult(chatThreadResponses)
     }

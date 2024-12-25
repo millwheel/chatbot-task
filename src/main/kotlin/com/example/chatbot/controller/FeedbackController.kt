@@ -1,5 +1,6 @@
 package com.example.chatbot.controller
 
+import com.example.chatbot.config.security.component.CustomPrincipal
 import com.example.chatbot.dto.feedback.FeedbackCreateRequest
 import com.example.chatbot.dto.feedback.FeedbackResponse
 import com.example.chatbot.dto.feedback.FeedbackUpdateRequest
@@ -8,6 +9,7 @@ import com.example.chatbot.service.feedback.FeedbackService
 import com.example.chatbot.validator.PaginationValidator
 import org.springframework.data.domain.Page
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -32,23 +34,23 @@ class FeedbackController(
     @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER')")
     @GetMapping("/me")
     fun getUserFeedbacks(
-        @RequestAttribute userId: String,
+        @AuthenticationPrincipal principal: CustomPrincipal,
         @RequestParam isPositive: Boolean?,
         @RequestParam(defaultValue = "0") pageIndex: Int,
         @RequestParam(defaultValue = "10") pageSize: Int,
         @RequestParam(defaultValue = "desc") orderDirection: String
         ): Page<FeedbackResponse> {
         paginationValidator.validateParameter(pageIndex, pageSize, orderDirection)
-        return feedbackService.getUserFeedbacks(userId, isPositive, pageIndex, pageSize, orderDirection)
+        return feedbackService.getUserFeedbacks(principal.userId, isPositive, pageIndex, pageSize, orderDirection)
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER')")
     @PostMapping
     fun createFeedback(
-        @RequestAttribute userId: String,
+        @AuthenticationPrincipal principal: CustomPrincipal,
         @RequestBody feedbackCreateRequest: FeedbackCreateRequest
     ) {
-        feedbackService.createFeedback(userId, feedbackCreateRequest)
+        feedbackService.createFeedback(principal.userId, feedbackCreateRequest)
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")

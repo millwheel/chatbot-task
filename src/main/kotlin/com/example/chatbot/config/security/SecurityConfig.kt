@@ -21,13 +21,12 @@ class SecurityConfig (
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .securityMatcher()
             .authorizeHttpRequests { authorization -> authorization
                 .requestMatchers( "/actuator/**", "/error/**", "/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/docs/**", "/swagger-resources/**").permitAll()
                 .anyRequest().authenticated()
             }
-            .addFilter(jwtAuthenticationFilter)
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .csrf{
                 it.disable()
             }

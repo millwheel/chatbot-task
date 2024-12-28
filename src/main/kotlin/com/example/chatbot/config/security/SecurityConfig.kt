@@ -1,7 +1,5 @@
 package com.example.chatbot.config.security
 
-import com.example.chatbot.config.security.component.CustomAccessDeniedHandler
-import com.example.chatbot.config.security.component.CustomAuthenticationEntryPoint
 import com.example.chatbot.config.security.component.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -14,8 +12,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 class SecurityConfig (
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
-    private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint,
-    private val customAccessDeniedHandler: CustomAccessDeniedHandler
 ){
 
     @Bean
@@ -27,14 +23,7 @@ class SecurityConfig (
                 .anyRequest().authenticated()
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .csrf{
-                it.disable()
-            }
-            .exceptionHandling { exceptions ->
-                exceptions
-                    .authenticationEntryPoint(customAuthenticationEntryPoint)
-                    .accessDeniedHandler(customAccessDeniedHandler)
-            }
+
         return http.build()
     }
 

@@ -14,11 +14,11 @@ import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import org.springframework.http.codec.ServerSentEvent
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
 
 
 @RestController
@@ -39,24 +39,19 @@ class ChatController (
         @RequestParam model: String = "gpt-4o-mini",
         @RequestParam isStreaming: Boolean = false,
         @RequestBody chatRequest: ChatRequest
-    ): Flux<ServerSentEvent<String>> {
+    ): String {
         val userId = principal.userId
-        val responseStream = chatService.createAnswer(userId, model, isStreaming, chatRequest)
+        val question = chatRequest.question
+        val answer = chatService.createAnswer(userId, model, isStreaming, question)
+        handleChatCompletion(userId, question, answer)
+        return answer
+    }
 
-        responseStream
-            .mapNotNull { it.data() }
-            .collectList()
-            .flatMap {
-                answers ->
-                val fullAnswer = answers.joinToString("")
-                val chat = chatService.createChat(userId, chatRequest.question, fullAnswer)
-                val user = userService.getUserById(userId)
-                userActivityLogService.createChatCreationLog(userId, user.email)
-                chatLogService.createChatLog(chat, user)
-                Mono.empty<Void>()
-            }
-
-        return responseStream
+    private fun handleChatCompletion(userId: String, question: String, fullAnswer: String) {
+        val chat = chatService.createChat(userId, question, fullAnswer)
+        val user = userService.getUserById(userId)
+        userActivityLogService.createChatCreationLog(userId, user.email)
+        chatLogService.createChatLog(chat, user)
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")

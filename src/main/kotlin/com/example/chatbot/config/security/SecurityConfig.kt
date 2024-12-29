@@ -30,6 +30,11 @@ class SecurityConfig (
             .csrf{
                 it.disable()
             }
+            .exceptionHandling { exceptions ->
+                exceptions
+                    .authenticationEntryPoint(customAuthenticationEntryPoint)
+                    .accessDeniedHandler(customAccessDeniedHandler)
+            }
         return http.build()
     }
 

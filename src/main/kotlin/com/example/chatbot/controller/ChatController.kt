@@ -17,8 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
-import reactor.core.scheduler.Schedulers
 
 
 @RestController
@@ -39,12 +37,19 @@ class ChatController (
         @RequestParam model: String = "gpt-4o-mini",
         @RequestParam isStreaming: Boolean = false,
         @RequestBody chatRequest: ChatRequest
-    ): String {
+    ): Flux<ServerSentEvent<String>> {
         val userId = principal.userId
         val question = chatRequest.question
-        val answer = chatService.createAnswer(userId, model, isStreaming, question)
-        handleChatCompletion(userId, question, answer)
-        return answer
+        val responseStream = chatService.createAnswer(userId, model, isStreaming, question)
+
+        responseStream
+            .mapNotNull { it.data() }
+            .collectList()
+            .doOnSuccess { answers ->
+                val fullAnswer = answers.joinToString("")
+                handleChatCompletion(userId, question, fullAnswer)
+            }
+        return responseStream
     }
 
     private fun handleChatCompletion(userId: String, question: String, fullAnswer: String) {

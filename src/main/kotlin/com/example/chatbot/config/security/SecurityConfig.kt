@@ -15,17 +15,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfig {
 
     @Bean
-    fun securityFilterChain(http: HttpSecurity, authenticationManagerBuilder: AuthenticationManagerBuilder): SecurityFilterChain {
-        val authenticationManager = authenticationManagerBuilder.build()
+    fun getAuthenticationManager(http: HttpSecurity) : AuthenticationManager {
+        val authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder::class.java)
+        return authenticationManagerBuilder.build()
+    }
 
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests { authorization -> authorization
                 .requestMatchers( "/actuator/**", "/error/**", "/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/docs/**", "/swagger-resources/**").permitAll()
                 .anyRequest().authenticated()
             }
-            .authenticationManager(authenticationManager)
-            .addFilterBefore(getRestAuthorizationFilter(authenticationManager), UsernamePasswordAuthenticationFilter::class.java)
+            .authenticationManager(getAuthenticationManager(http))
+            .addFilterBefore(getRestAuthorizationFilter(getAuthenticationManager(http)), UsernamePasswordAuthenticationFilter::class.java)
             .csrf {
                 it.disable()
             }

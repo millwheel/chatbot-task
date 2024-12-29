@@ -37,19 +37,19 @@ class ChatController (
         @RequestParam model: String = "gpt-4o-mini",
         @RequestParam isStreaming: Boolean = false,
         @RequestBody chatRequest: ChatRequest
-    ): Flux<ServerSentEvent<String>> {
+    ): String {
         val userId = principal.userId
         val question = chatRequest.question
-        val responseStream = chatService.createAnswer(userId, model, isStreaming, question)
-
-        responseStream
-            .mapNotNull { it.data() }
-            .collectList()
-            .doOnSuccess { answers ->
-                val fullAnswer = answers.joinToString("")
-                handleChatCompletion(userId, question, fullAnswer)
-            }
-        return responseStream
+        val answer = chatService.createAnswer(userId, model, isStreaming, question)
+        handleChatCompletion(userId, question, answer)
+//        responseStream
+//            .mapNotNull { it.data() }
+//            .collectList()
+//            .doOnSuccess { answers ->
+//                val fullAnswer = answers.joinToString("")
+//                handleChatCompletion(userId, question, fullAnswer)
+//            }
+        return answer
     }
 
     private fun handleChatCompletion(userId: String, question: String, fullAnswer: String) {

@@ -22,29 +22,37 @@ class ChatService (
     private val openaiApiSender: OpenaiApiSender
 ){
 
-    fun createAnswer(userId: String, model: String, isStreaming: Boolean, question: String): Flux<ServerSentEvent<String>> {
-        val responseStream: Flux<ServerSentEvent<String>>
-        if (isStreaming) {
-            responseStream = openaiApiSender.sendRequestAndStreamResponse(question, model)
-                .doOnNext { data -> println("Data: $data") }
-                .doOnComplete { println("Stream complete for client") }
-                .doOnCancel { println("Stream cancelled by client") }
-                .delayElements(Duration.ofMillis(50))
-                .map { data ->
-                    val answerStream = extractAnswerFromResponseStream(data)
-                    ServerSentEvent.builder<String>().data(answerStream).build()
-                }
-        } else {
-            responseStream = Flux.just(openaiApiSender.sendRequestAndGetResponse(question, model))
-                .doOnNext { data -> println("Data: $data") }
-                .map { data ->
-                    val answer = extractAnswerFromResponse(data)
-                    ServerSentEvent.builder<String>().data(answer).build()
-                }
-        }
+//    fun createAnswer(userId: String, model: String, isStreaming: Boolean, question: String): Flux<ServerSentEvent<String>> {
+//        val responseStream: Flux<ServerSentEvent<String>>
+//        if (isStreaming) {
+//            responseStream = openaiApiSender.sendRequestAndStreamResponse(question, model)
+//                .doOnNext { data -> println("Data: $data") }
+//                .doOnComplete { println("Stream complete for client") }
+//                .doOnCancel { println("Stream cancelled by client") }
+//                .delayElements(Duration.ofMillis(50))
+//                .map { data ->
+//                    val answerStream = extractAnswerFromResponseStream(data)
+//                    ServerSentEvent.builder<String>().data(answerStream).build()
+//                }
+//        } else {
+//            responseStream = Flux.just(openaiApiSender.sendRequestAndGetResponse(question, model))
+//                .doOnNext { data -> println("Data: $data") }
+//                .map { data ->
+//                    val answer = extractAnswerFromResponse(data)
+//                    ServerSentEvent.builder<String>().data(answer).build()
+//                }
+//        }
+//
+//        return responseStream
+//    }
 
-        return responseStream
+    // TODO 위 비동기 요청으로 동작하도록 변경
+    fun createAnswer(userId: String, model: String, isStreaming: Boolean, question: String): String {
+        val response = openaiApiSender.sendRequestAndGetResponse(question, model)
+        val answer = extractAnswerFromResponse(response)
+        return answer
     }
+
 
     @Transactional
     fun createChat(userId: String, question: String, answer: String): Chat {

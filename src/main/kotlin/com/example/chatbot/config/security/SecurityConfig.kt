@@ -1,10 +1,8 @@
 package com.example.chatbot.config.security
 
-import com.example.chatbot.config.security.component.RestAuthenticationFilter
+import com.example.chatbot.config.security.component.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.SecurityFilterChain
@@ -12,13 +10,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableMethodSecurity
-class SecurityConfig {
-
-    @Bean
-    fun getAuthenticationManager(http: HttpSecurity) : AuthenticationManager {
-        val authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder::class.java)
-        return authenticationManagerBuilder.build()
-    }
+class SecurityConfig (
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+) {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -28,18 +22,11 @@ class SecurityConfig {
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/docs/**", "/swagger-resources/**").permitAll()
                 .anyRequest().authenticated()
             }
-            .authenticationManager(getAuthenticationManager(http))
-            .addFilterBefore(getRestAuthorizationFilter(getAuthenticationManager(http)), UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .csrf {
                 it.disable()
             }
         return http.build()
-    }
-
-    fun getRestAuthorizationFilter(authenticationManager: AuthenticationManager): RestAuthenticationFilter {
-        val restAuthenticationFilter = RestAuthenticationFilter()
-        restAuthenticationFilter.setAuthenticationManager(authenticationManager)
-        return restAuthenticationFilter
     }
 
 }
